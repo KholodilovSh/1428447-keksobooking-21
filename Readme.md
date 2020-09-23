@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Шурик Холодилов](https://up.htmlacademy.ru/javascript/21/user/1428447).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Мирошниченко](https://htmlacademy.ru/profile/id591417).
 
 ---
 
