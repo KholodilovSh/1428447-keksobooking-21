@@ -9,7 +9,12 @@ const RANGE_X = [0, 1000];
 const RANGE_Y = [130, 630];
 const RANGE_PHOTOS = [1, 10];
 
+const PIN_HEIGHT = 165;
+const PIN_WIDTH_HALF = 25;
+
 const map = document.querySelector(`.map`);
+const mapPins = map.querySelector(`.map__pins`);
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
 const getRandomNumber = (minNumber = 0, maxNumber = 100, roundDigit = 0) => minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
 const getRandomFromRange = (array) => getRandomNumber(array[0], array[1]);
@@ -33,7 +38,7 @@ const getJSObjects = function () {
 
     jsObjects.push({
       author: {
-        avatar: `img/avatars/user0${i}`
+        avatar: `img/avatars/user0${i}.png`
       },
       offer: {
         title: `заголовок_${i}`,
@@ -45,7 +50,7 @@ const getJSObjects = function () {
         checkin: CHECKIN[0],
         checkout: CHECKOUT[0],
         features: FEATURES[0],
-        description: `описание`,
+        description: `описание_${i}`,
         photos: objectPhotos,
         location: {
           x: locationX,
@@ -57,8 +62,28 @@ const getJSObjects = function () {
   return jsObjects;
 };
 
+const renderPin = function (pin) {
+  const pinElement = pinTemplate.cloneNode(true);
+  pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
+  pinElement.style.top = `${pin.offer.location.y - PIN_HEIGHT}px`;
+
+  const imgElement = pinElement.querySelector(`img`);
+  imgElement.src = pin.author.avatar;
+  imgElement.alt = pin.offer.description;
+
+  return pinElement;
+};
+
+const showPins = function (jsObjects) {
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < jsObjects.length; i++) {
+    fragment.appendChild(renderPin(jsObjects[i]));
+  }
+  mapPins.appendChild(fragment);
+};
+
 const jsObjects = getJSObjects();
 
 initMap(jsObjects);
 
-
+showPins(jsObjects);
