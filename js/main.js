@@ -20,8 +20,8 @@ const mapPins = map.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
 const getRandomNumber = (minNumber = 0, maxNumber = 100, roundDigit = 0) => minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
-const getRandomFromRange = (array) => getRandomNumber(array[0], array[1]);
-const getRandomFromArray = (array) => array[getRandomNumber(0, array.length - 1)];
+const getRandomFromRange = (arrayRange) => getRandomNumber(...arrayRange);
+const getRandomFromArray = (arrayItems) => arrayItems[getRandomNumber(0, arrayItems.length - 1)];
 
 const getPointsOfPins = function () {
   const jsObjects = [];
