@@ -1,13 +1,16 @@
 "use strict";
 
-const OBJECTS = 8;
+const POINTS_AMOUNT = 8;
 const TYPES = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const RANGE_X = [0, 1000];
+const RANGE_X = [0, 1200];
 const RANGE_Y = [130, 630];
 const RANGE_PHOTOS = [1, 10];
+const RANGE_PRICE = [0, 1000000];
+const RANGE_ROOMS = [1, 10];
+const RANGE_GUESTS = [1, 10];
 
 const PIN_HEIGHT = 165;
 const PIN_WIDTH_HALF = 25;
@@ -18,14 +21,11 @@ const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__
 
 const getRandomNumber = (minNumber = 0, maxNumber = 100, roundDigit = 0) => minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
 const getRandomFromRange = (array) => getRandomNumber(array[0], array[1]);
+const getRandomFromArray = (array) => array[getRandomNumber(0, array.length - 1)];
 
-const initMap = function () {
-  map.classList.remove(`map--faded`);
-};
-
-const getJSObjects = function () {
+const getPointsOfPins = function () {
   const jsObjects = [];
-  for (let i = 1; i <= OBJECTS; i++) {
+  for (let i = 1; i <= POINTS_AMOUNT; i++) {
 
     const locationX = getRandomFromRange(RANGE_X);
     const locationY = getRandomFromRange(RANGE_Y);
@@ -33,7 +33,7 @@ const getJSObjects = function () {
     const objectPhotos = [];
     const numberPhotos = getRandomFromRange(RANGE_PHOTOS);
     for (let j = 1; j <= numberPhotos; j++) {
-      objectPhotos.push(`http://o${i - 1}.github.io/assets/images/tokyo/hotel${j}.jpg`);
+      objectPhotos.push(`http://o0.github.io/assets/images/tokyo/hotel${j}.jpg`);
     }
 
     jsObjects.push({
@@ -43,13 +43,13 @@ const getJSObjects = function () {
       offer: {
         title: `заголовок_${i}`,
         address: `${locationX},${locationY}`,
-        price: 100 * i,
-        type: TYPES[0],
-        rooms: 1,
-        guests: 3,
-        checkin: CHECKIN[0],
-        checkout: CHECKOUT[0],
-        features: FEATURES[0],
+        price: getRandomFromRange(RANGE_PRICE),
+        type: getRandomFromArray(TYPES),
+        rooms: getRandomFromRange(RANGE_ROOMS),
+        guests: getRandomFromRange(RANGE_GUESTS),
+        checkin: getRandomFromArray(CHECKIN),
+        checkout: getRandomFromArray(CHECKOUT),
+        features: getRandomFromArray(FEATURES),
         description: `описание_${i}`,
         photos: objectPhotos,
         location: {
@@ -74,16 +74,20 @@ const renderPin = function (pin) {
   return pinElement;
 };
 
-const showPins = function (jsObjects) {
+const showPins = function (jsPins) {
   const fragment = document.createDocumentFragment();
-  for (let i = 0; i < jsObjects.length; i++) {
-    fragment.appendChild(renderPin(jsObjects[i]));
+  for (let i = 0; i < jsPins.length; i++) {
+    fragment.appendChild(renderPin(jsPins[i]));
   }
   mapPins.appendChild(fragment);
 };
 
-const jsObjects = getJSObjects();
+const initMap = function () {
+  map.classList.remove(`map--faded`);
 
-initMap(jsObjects);
+  const jsPins = getPointsOfPins();
 
-showPins(jsObjects);
+  showPins(jsPins);
+};
+
+initMap();
