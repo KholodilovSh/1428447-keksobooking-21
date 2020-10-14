@@ -275,9 +275,11 @@ const onChangeType = function () {
   adFormPrice.placeholder = adFormPrice.min;
 };
 
-adFormReset.addEventListener(`reset`, function () {
+adForm.addEventListener(`reset`, function (evt) {
+  adForm.reset();
   onChangeType();
-  initMap();
+  // initMap();
+  // evt.preventDefault();
 });
 
 adFormSubmit.addEventListener(`click`, function () {
