@@ -2,11 +2,19 @@
 
 const POINTS_AMOUNT = 8;
 const TYPES = [`palace`, `flat`, `house`, `bungalow`];
-const TYPES_RU = {
-  flat: `Квартира`,
-  bungalow: `Бунгало`,
-  house: `Дом`,
-  palace: `Дворец`
+const typesFeatures = {
+  flat: {
+    russian: `Квартира`,
+    minPrice: 1000},
+  bungalow: {
+    russian: `Бунгало`,
+    minPrice: 0},
+  house: {
+    russian: `Дом`,
+    minPrice: 5000},
+  palace: {
+    russian: `Дворец`,
+    minPrice: 10000}
 };
 const CHECKIN = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT = [`12:00`, `13:00`, `14:00`];
@@ -18,9 +26,16 @@ const RANGE_PRICE = [0, 1000000];
 const RANGE_ROOMS = [1, 10];
 const RANGE_GUESTS = [1, 10];
 
+// координаты адреса в неактивном состоянии
+const BUTTON_STYLE_LEFT = 570;
+const BUTTON_STYLE_TOP = 375;
+const MAFFIN_MIDDLE = 33;
+const ADDRESS_INIT = `${BUTTON_STYLE_LEFT + MAFFIN_MIDDLE},${BUTTON_STYLE_TOP + MAFFIN_MIDDLE}`;
+
 const PIN_HEIGHT = 165;
 const PIN_WIDTH_HALF = 25;
-const KEYS = {escape: `Escape`, enter: `Enter`};
+
+const KeysCode = {ESCAPE: `Escape`, ENTER: `Enter`};
 
 const map = document.querySelector(`.map`);
 const mapPinMain = map.querySelector(`.map__pin--main`);
@@ -31,6 +46,17 @@ const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map
 const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 const adForm = document.querySelector(`.ad-form`);
 const adFieldsets = adForm.querySelectorAll(`fieldset`);
+const adFormTitle = adForm.querySelector(`.ad-form__title`);
+const adFormAddress = adForm.querySelector(`.ad-form__address`);
+const adFormType = adForm.querySelector(`.ad-form__type`);
+const adFormPrice = adForm.querySelector(`.ad-form__price`);
+const adFormRooms = adForm.querySelector(`.ad-form__rooms`);
+const adFormTimeIn = adForm.querySelector(`.ad-form__timein`);
+const adFormTimeOut = adForm.querySelector(`.ad-form__timeout`);
+const adFormGuests = adForm.querySelector(`.ad-form__guests`);
+const adFormReset = adForm.querySelector(`.ad-form__reset`);
+const adFormSubmit = adForm.querySelector(`.ad-form__submit`);
+
 const mapFilters = document.querySelector(`.map__filters`);
 
 const getRandomNumber = (minNumber = 0, maxNumber = 100, roundDigit = 0) => minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
@@ -78,6 +104,14 @@ const getPointsOfPins = function () {
   return jsObjects;
 };
 
+const showPins = function (jsPins) {
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < jsPins.length; i++) {
+    fragment.appendChild(renderPin(jsPins[i]));
+  }
+  mapPins.appendChild(fragment);
+};
+
 const renderPin = function (pin) {
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
@@ -88,14 +122,6 @@ const renderPin = function (pin) {
   imgElement.alt = pin.offer.description;
 
   return pinElement;
-};
-
-const showPins = function (jsPins) {
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < jsPins.length; i++) {
-    fragment.appendChild(renderPin(jsPins[i]));
-  }
-  mapPins.appendChild(fragment);
 };
 
 const toggleState = function (disabledState) {
@@ -123,6 +149,11 @@ const initMap = function () {
   // Форма заполнения информации об объявлении .ad-form содержит класс ad-form--disabled;
   // +
 
+  // инициируем поле Адрес
+  adFormAddress.value = ADDRESS_INIT;
+  // закрываем возможность коррекции поля Адрес руками
+  adFormAddress.readonly = true;
+
   toggleState(true);
 
 
@@ -134,98 +165,143 @@ const initMap = function () {
   });
 
   mapPinMain.addEventListener(`keydown`, function (evt) {
-    if (evt.key === KEYS.enter) {
+    if (evt.key === KeysCode.ENTER) {
       toggleState(false);
     }
   });
 
+  adFormTitle.addEventListener(`invalid`, function () {
+    if (adFormTitle.validity.tooShort) {
+      adFormTitle.setCustomValidity(`Имя должно состоять минимум из 30-и символов`);
+    } else if (adFormTitle.validity.tooLong) {
+      adFormTitle.setCustomValidity(`Имя не должно превышать 100-а символов`);
+    } else if (adFormTitle.validity.valueMissing) {
+      adFormTitle.setCustomValidity(`Обязательное поле`);
+    } else {
+    // при работе с обработчиками валидации — не забыть сбросить значение поля,
+    // если это значение стало корректно.
+      adFormTitle.setCustomValidity(``);
+    }
+  });
 
+  const dummy = false;
+  if (dummy) {
+    const jsPins = getPointsOfPins();
 
-  // ////////////////////////////////////
+    showPins(jsPins);
 
-
-  // const jsPins = getPointsOfPins();
-
-  // showPins(jsPins);
-
-  // map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
+    map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
+  }
 };
 
-// const renderCard = function (pin) {
-//   const cardElement = cardTemplate.cloneNode(true);
+const renderCard = function (pin) {
+  const cardElement = cardTemplate.cloneNode(true);
 
-//   // Выведите заголовок объявления offer.title в заголовок .popup__title.
-//   let someElement = cardElement.querySelector(`.popup__title`);
-//   someElement.textContent = pin.offer.title;
+  // Выведите заголовок объявления offer.title в заголовок .popup__title.
+  let someElement = cardElement.querySelector(`.popup__title`);
+  someElement.textContent = pin.offer.title;
 
-//   // Выведите адрес offer.address в блок .popup__text--address.
-//   someElement = cardElement.querySelector(`.popup__text--address`);
-//   someElement.textContent = pin.offer.address;
+  // Выведите адрес offer.address в блок .popup__text--address.
+  someElement = cardElement.querySelector(`.popup__text--address`);
+  someElement.textContent = pin.offer.address;
 
-//   // Выведите цену offer.price в блок .popup__text--price строкой вида {{offer.price}}₽/ночь.
-//   // Например, 5200₽/ночь.
-//   // <p class="popup__text popup__text--price">5200&#x20bd;<span>/ночь</span></p>
-//   someElement = cardElement.querySelector(`.popup__text--price`);
-//   someElement.textContent = `${pin.offer.price}₽/ночь`;
+  // Выведите цену offer.price в блок .popup__text--price строкой вида {{offer.price}}₽/ночь.
+  // Например, 5200₽/ночь.
+  // <p class="popup__text popup__text--price">5200&#x20bd;<span>/ночь</span></p>
+  someElement = cardElement.querySelector(`.popup__text--price`);
+  someElement.textContent = `${pin.offer.price}₽/ночь`;
 
-//   // В блок .popup__type выведите тип жилья offer.type: Квартира для flat, Бунгало для bungalow, Дом для house, Дворец для palace.
-//   someElement = cardElement.querySelector(`.popup__type`);
-//   someElement.textContent = TYPES_RU[pin.offer.type];
+  // В блок .popup__type выведите тип жилья offer.type: Квартира для flat, Бунгало для bungalow, Дом для house, Дворец для palace.
+  someElement = cardElement.querySelector(`.popup__type`);
+  someElement.textContent = typesFeatures[pin.offer.type].russian;
 
-//   // Выведите количество гостей и комнат offer.rooms и offer.guests в блок .popup__text--capacity строкой вида {{offer.rooms}} комнаты для {{offer.guests}} гостей. Например, 2 комнаты для 3 гостей.
-//   someElement = cardElement.querySelector(`.popup__text--capacity`);
-//   someElement.textContent = `${pin.offer.rooms} комнаты для ${pin.offer.guests} гостей`;
+  // Выведите количество гостей и комнат offer.rooms и offer.guests в блок .popup__text--capacity строкой вида {{offer.rooms}} комнаты для {{offer.guests}} гостей. Например, 2 комнаты для 3 гостей.
+  someElement = cardElement.querySelector(`.popup__text--capacity`);
+  someElement.textContent = `${pin.offer.rooms} комнаты для ${pin.offer.guests} гостей`;
 
-//   // Время заезда и выезда offer.checkin и offer.checkout в блок .popup__text--time строкой вида Заезд после {{offer.checkin}}, выезд до {{offer.checkout}}. Например, заезд после 14:00, выезд до 12:00.
-//   someElement = cardElement.querySelector(`.popup__text--time`);
-//   someElement.textContent = `заезд после ${pin.offer.checkin}, выезд до ${pin.offer.checkout}`;
+  // Время заезда и выезда offer.checkin и offer.checkout в блок .popup__text--time строкой вида Заезд после {{offer.checkin}}, выезд до {{offer.checkout}}. Например, заезд после 14:00, выезд до 12:00.
+  someElement = cardElement.querySelector(`.popup__text--time`);
+  someElement.textContent = `заезд после ${pin.offer.checkin}, выезд до ${pin.offer.checkout}`;
 
-//   // В список .popup__features выведите все доступные удобства в объявлении.
-//   someElement = cardElement.querySelector(`.popup__features`);
-//   const someChildren = someElement.children;
-//   const classFeatures = [];
-//   for (let i = 0; i < pin.offer.features.length; i++) {
-//     classFeatures.push(`popup__feature--${pin.offer.features[i]}`);
-//   }
+  // В список .popup__features выведите все доступные удобства в объявлении.
+  someElement = cardElement.querySelector(`.popup__features`);
+  const someChildren = someElement.children;
+  const classFeatures = [];
+  for (let i = 0; i < pin.offer.features.length; i++) {
+    classFeatures.push(`popup__feature--${pin.offer.features[i]}`);
+  }
 
-//   for (let i = someChildren.length - 1; i >= 0; i--) {
-//     const child = someChildren[i];
-//     let noFeature = true;
-//     for (let j = 0; j < classFeatures.length; j++) {
-//       if (child.classList.contains(classFeatures[j])) {
-//         noFeature = false;
-//         break;
-//       }
-//     }
-//     if (noFeature) {
-//       someChildren[i].remove();
-//     }
-//   }
+  for (let i = someChildren.length - 1; i >= 0; i--) {
+    const child = someChildren[i];
+    let noFeature = true;
+    for (let j = 0; j < classFeatures.length; j++) {
+      if (child.classList.contains(classFeatures[j])) {
+        noFeature = false;
+        break;
+      }
+    }
+    if (noFeature) {
+      someChildren[i].remove();
+    }
+  }
 
-//   // В блок .popup__description выведите описание объекта недвижимости offer.description.
-//   someElement = cardElement.querySelector(`.popup__description`);
-//   someElement.textContent = pin.offer.description;
+  // В блок .popup__description выведите описание объекта недвижимости offer.description.
+  someElement = cardElement.querySelector(`.popup__description`);
+  someElement.textContent = pin.offer.description;
 
-//   // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
-//   someElement = cardElement.querySelector(`.popup__photos`);
-//   const somePhoto = someElement.querySelector(`.popup__photo`).cloneNode(true);
-//   someElement.children[0].remove();
+  // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
+  someElement = cardElement.querySelector(`.popup__photos`);
+  const somePhoto = someElement.querySelector(`.popup__photo`).cloneNode(true);
+  someElement.children[0].remove();
 
-//   for (let i = 0; i < pin.offer.photos.length; i++) {
-//     const tempPhoto = somePhoto.cloneNode(true);
-//     tempPhoto.src = pin.offer.photos[i];
-//     someElement.appendChild(tempPhoto);
-//   }
-//   // <div class="popup__photos">
-//   //   <img src="" class="popup__photo" width="45" height="40" alt="Фотография жилья">
-//   // </div>
+  for (let i = 0; i < pin.offer.photos.length; i++) {
+    const tempPhoto = somePhoto.cloneNode(true);
+    tempPhoto.src = pin.offer.photos[i];
+    someElement.appendChild(tempPhoto);
+  }
+  // <div class="popup__photos">
+  //   <img src="" class="popup__photo" width="45" height="40" alt="Фотография жилья">
+  // </div>
 
-//   // Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
-//   someElement = cardElement.querySelector(`.popup__avatar`);
-//   someElement.src = pin.author.avatar;
+  // Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
+  someElement = cardElement.querySelector(`.popup__avatar`);
+  someElement.src = pin.author.avatar;
 
-//   return cardElement;
-// };
+  return cardElement;
+};
 
-initMap();
+const onChangeType = function () {
+  adFormPrice.min = typesFeatures[adFormType.value].minPrice;
+  adFormPrice.placeholder = adFormPrice.min;
+};
 
+adFormReset.addEventListener(`reset`, function () {
+  onChangeType();
+  initMap();
+});
+
+adFormSubmit.addEventListener(`click`, function () {
+  if ((adFormRooms.value === `100`) === (adFormGuests.value === `0`)) {
+    if (adFormRooms.value < adFormGuests.value) {
+      adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
+    } else {
+      adFormGuests.setCustomValidity(``);
+    }
+  } else {
+    adFormGuests.setCustomValidity(`Некорректный выбор комнат и гостей.`);
+  }
+});
+
+adFormType.addEventListener(`change`, function () {
+  onChangeType();
+});
+
+adFormTimeIn.addEventListener(`change`, function () {
+  adFormTimeOut.value = adFormTimeIn.value;
+});
+
+adFormTimeOut.addEventListener(`change`, function () {
+  adFormTimeIn.value = adFormTimeOut.value;
+});
+
+window.addEventListener(`load`, initMap);
