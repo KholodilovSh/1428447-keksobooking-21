@@ -276,20 +276,25 @@ const onChangeType = function () {
 };
 
 adForm.addEventListener(`reset`, function (evt) {
+  evt.preventDefault();
   adForm.reset();
   onChangeType();
-  // initMap();
-  // evt.preventDefault();
+  initMap();
 });
 
 adFormSubmit.addEventListener(`click`, function () {
   if ((adFormRooms.value === `100`) === (adFormGuests.value === `0`)) {
+    // оба условия или true, или оба false
+    // если оба false, надо сравнить кол-во гостей и комнат
+    // если оба true, то (adFormRooms.value > adFormGuests.value) => true
     if (adFormRooms.value < adFormGuests.value) {
       adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
     } else {
       adFormGuests.setCustomValidity(``);
     }
   } else {
+    // сюда попадаем если ((adFormRooms.value === `100`) !== (adFormGuests.value === `0`))
+    //    т.е. одно условие true, а другое false
     adFormGuests.setCustomValidity(`Некорректный выбор комнат и гостей.`);
   }
 });
