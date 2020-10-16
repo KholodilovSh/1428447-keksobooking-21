@@ -46,7 +46,6 @@ const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map
 const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 const adForm = document.querySelector(`.ad-form`);
 const adFieldsets = adForm.querySelectorAll(`fieldset`);
-const adFormTitle = adForm.querySelector(`.ad-form__title`);
 const adFormAddress = adForm.querySelector(`.ad-form__address`);
 const adFormType = adForm.querySelector(`.ad-form__type`);
 const adFormPrice = adForm.querySelector(`.ad-form__price`);
@@ -54,7 +53,6 @@ const adFormRooms = adForm.querySelector(`.ad-form__rooms`);
 const adFormTimeIn = adForm.querySelector(`.ad-form__timein`);
 const adFormTimeOut = adForm.querySelector(`.ad-form__timeout`);
 const adFormGuests = adForm.querySelector(`.ad-form__guests`);
-const adFormReset = adForm.querySelector(`.ad-form__reset`);
 const adFormSubmit = adForm.querySelector(`.ad-form__submit`);
 
 const mapFilters = document.querySelector(`.map__filters`);
