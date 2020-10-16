@@ -59,9 +59,17 @@ const adFormSubmit = adForm.querySelector(`.ad-form__submit`);
 
 const mapFilters = document.querySelector(`.map__filters`);
 
-const getRandomNumber = (minNumber = 0, maxNumber = 100, roundDigit = 0) => minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
-const getRandomFromRange = (arrayRange) => getRandomNumber(...arrayRange);
-const getRandomFromArray = (arrayItems) => arrayItems[getRandomNumber(0, arrayItems.length - 1)];
+const getRandomNumber = function (minNumber = 0, maxNumber = 100, roundDigit = 0) {
+  return minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
+};
+
+const getRandomFromRange = function (arrayRange) {
+  return getRandomNumber(...arrayRange);
+};
+
+const getRandomFromArray = function (arrayItems) {
+  return arrayItems[getRandomNumber(0, arrayItems.length - 1)];
+};
 
 const getPointsOfPins = function () {
   const jsObjects = [];
@@ -167,20 +175,6 @@ const initMap = function () {
   mapPinMain.addEventListener(`keydown`, function (evt) {
     if (evt.key === KeysCode.ENTER) {
       toggleState(false);
-    }
-  });
-
-  adFormTitle.addEventListener(`invalid`, function () {
-    if (adFormTitle.validity.tooShort) {
-      adFormTitle.setCustomValidity(`Имя должно состоять минимум из 30-и символов`);
-    } else if (adFormTitle.validity.tooLong) {
-      adFormTitle.setCustomValidity(`Имя не должно превышать 100-а символов`);
-    } else if (adFormTitle.validity.valueMissing) {
-      adFormTitle.setCustomValidity(`Обязательное поле`);
-    } else {
-    // при работе с обработчиками валидации — не забыть сбросить значение поля,
-    // если это значение стало корректно.
-      adFormTitle.setCustomValidity(``);
     }
   });
 
