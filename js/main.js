@@ -145,6 +145,12 @@ const toggleState = function (disabledState) {
 
   if (disabledState === false) {
     adForm.classList.remove(`ad-form--disabled`);
+
+    const jsPins = getPointsOfPins();
+
+    showPins(jsPins);
+
+    map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
   }
 };
 
@@ -162,7 +168,6 @@ const initMap = function () {
 
   toggleState(true);
 
-
   // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
   mapPinMain.addEventListener(`mousedown`, function (evt) {
     if (evt.which === 1) {
@@ -175,15 +180,6 @@ const initMap = function () {
       toggleState(false);
     }
   });
-
-  const dummy = false;
-  if (dummy) {
-    const jsPins = getPointsOfPins();
-
-    showPins(jsPins);
-
-    map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
-  }
 };
 
 const renderCard = function (pin) {
@@ -262,16 +258,28 @@ const renderCard = function (pin) {
   return cardElement;
 };
 
-const onChangeType = function () {
-  adFormPrice.min = typesFeatures[adFormType.value].minPrice;
+const onChangeType = function (value) {
+  adFormPrice.min = value || typesFeatures[adFormType.value].minPrice;
   adFormPrice.placeholder = adFormPrice.min;
 };
+
+// const adFormReset = document.querySelector(`.ad-form__reset`);
+
+// adFormReset.addEventListener(`click`, function (evt) {
+//   evt.preventDefault();
+//   adForm.reset();
+//   initMap();
+//   onChangeType();
+//   // evt.preventDefault();
+// });
+
 
 adForm.addEventListener(`reset`, function (evt) {
   evt.preventDefault();
   adForm.reset();
-  onChangeType();
   initMap();
+  onChangeType();
+  // evt.preventDefault();
 });
 
 adFormSubmit.addEventListener(`click`, function () {
