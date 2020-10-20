@@ -149,6 +149,9 @@ const toggleState = function (disabledState) {
     adForm.classList.remove(`ad-form--disabled`);
 
     if (!isInitDone) {
+
+      map.classList.remove(`map--faded`);
+
       const jsPins = getPointsOfPins();
 
       showPins(jsPins);
@@ -162,13 +165,7 @@ const toggleState = function (disabledState) {
 };
 
 const initMap = function () {
-  // Блок с картой .map содержит класс map--faded;
-  // map.classList.remove(`map--faded`);
 
-  // Форма заполнения информации об объявлении .ad-form содержит класс ad-form--disabled;
-  // +
-
-  // инициируем поле Адрес
   adFormAddress.value = ADDRESS_INIT;
   // закрываем возможность коррекции поля Адрес руками
   adFormAddress.readonly = true;
