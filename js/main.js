@@ -1,5 +1,6 @@
 "use strict";
 
+let isInitDone = false;
 const POINTS_AMOUNT = 8;
 const TYPES = [`palace`, `flat`, `house`, `bungalow`];
 const typesFeatures = {
@@ -144,13 +145,19 @@ const toggleState = function (disabledState) {
   }
 
   if (disabledState === false) {
+
     adForm.classList.remove(`ad-form--disabled`);
 
-    const jsPins = getPointsOfPins();
+    if (!isInitDone) {
+      const jsPins = getPointsOfPins();
 
-    showPins(jsPins);
+      showPins(jsPins);
 
-    map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
+      map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
+
+      isInitDone = true;
+    }
+
   }
 };
 
