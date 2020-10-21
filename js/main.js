@@ -1,12 +1,21 @@
 "use strict";
 
+let isInitDone = false;
 const POINTS_AMOUNT = 8;
 const TYPES = [`palace`, `flat`, `house`, `bungalow`];
-const TYPES_RU = {
-  flat: `Квартира`,
-  bungalow: `Бунгало`,
-  house: `Дом`,
-  palace: `Дворец`
+const typesFeatures = {
+  flat: {
+    russian: `Квартира`,
+    minPrice: 1000},
+  bungalow: {
+    russian: `Бунгало`,
+    minPrice: 0},
+  house: {
+    russian: `Дом`,
+    minPrice: 5000},
+  palace: {
+    russian: `Дворец`,
+    minPrice: 10000}
 };
 const CHECKIN = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT = [`12:00`, `13:00`, `14:00`];
@@ -18,20 +27,48 @@ const RANGE_PRICE = [0, 1000000];
 const RANGE_ROOMS = [1, 10];
 const RANGE_GUESTS = [1, 10];
 
+// координаты адреса в неактивном состоянии
+const BUTTON_STYLE_LEFT = 570;
+const BUTTON_STYLE_TOP = 375;
+const MAFFIN_MIDDLE = 33;
+const ADDRESS_INIT = `${BUTTON_STYLE_LEFT + MAFFIN_MIDDLE},${BUTTON_STYLE_TOP + MAFFIN_MIDDLE}`;
+
 const PIN_HEIGHT = 165;
 const PIN_WIDTH_HALF = 25;
 
+const KeysCode = {ESCAPE: `Escape`, ENTER: `Enter`};
+
 const map = document.querySelector(`.map`);
+const mapPinMain = map.querySelector(`.map__pin--main`);
 const mapPins = map.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 const mapFiltersContainer = map.querySelector(`.map__filters-container`);
+const adForm = document.querySelector(`.ad-form`);
+const adFieldsets = adForm.querySelectorAll(`fieldset`);
+const adFormAddress = adForm.querySelector(`.ad-form__address`);
+const adFormType = adForm.querySelector(`.ad-form__type`);
+const adFormPrice = adForm.querySelector(`.ad-form__price`);
+const adFormRooms = adForm.querySelector(`.ad-form__rooms`);
+const adFormTimeIn = adForm.querySelector(`.ad-form__timein`);
+const adFormTimeOut = adForm.querySelector(`.ad-form__timeout`);
+const adFormGuests = adForm.querySelector(`.ad-form__guests`);
+const adFormSubmit = adForm.querySelector(`.ad-form__submit`);
 
+const mapFilters = document.querySelector(`.map__filters`);
 
-const getRandomNumber = (minNumber = 0, maxNumber = 100, roundDigit = 0) => minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
-const getRandomFromRange = (arrayRange) => getRandomNumber(...arrayRange);
-const getRandomFromArray = (arrayItems) => arrayItems[getRandomNumber(0, arrayItems.length - 1)];
+const getRandomNumber = function (minNumber = 0, maxNumber = 100, roundDigit = 0) {
+  return minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
+};
+
+const getRandomFromRange = function (arrayRange) {
+  return getRandomNumber(...arrayRange);
+};
+
+const getRandomFromArray = function (arrayItems) {
+  return arrayItems[getRandomNumber(0, arrayItems.length - 1)];
+};
 
 const getPointsOfPins = function () {
   const jsObjects = [];
@@ -74,6 +111,14 @@ const getPointsOfPins = function () {
   return jsObjects;
 };
 
+const showPins = function (jsPins) {
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < jsPins.length; i++) {
+    fragment.appendChild(renderPin(jsPins[i]));
+  }
+  mapPins.appendChild(fragment);
+};
+
 const renderPin = function (pin) {
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
@@ -86,22 +131,59 @@ const renderPin = function (pin) {
   return pinElement;
 };
 
-const showPins = function (jsPins) {
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < jsPins.length; i++) {
-    fragment.appendChild(renderPin(jsPins[i]));
+const toggleState = function (disabledState) {
+  // Если  disabledState = true
+  // Все интерактивные элементы формы .ad-form должны быть заблокированы с помощью атрибута disabled, добавленного на них или на их родительские блоки fieldset;
+  for (let i = 0; i < adFieldsets.length; i++) {
+    adFieldsets[i].disabled = disabledState;
   }
-  mapPins.appendChild(fragment);
+
+  // а форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
+  mapFilters.disabled = disabledState;
+  for (let i = 0; i < mapFilters.children.length; i++) {
+    mapFilters.children[i].disabled = disabledState;
+  }
+
+  if (disabledState === false) {
+
+    adForm.classList.remove(`ad-form--disabled`);
+
+    if (!isInitDone) {
+
+      map.classList.remove(`map--faded`);
+
+      const jsPins = getPointsOfPins();
+
+      showPins(jsPins);
+
+      map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
+
+      isInitDone = true;
+    }
+
+  }
 };
 
 const initMap = function () {
-  map.classList.remove(`map--faded`);
 
-  const jsPins = getPointsOfPins();
+  adFormAddress.value = ADDRESS_INIT;
+  // закрываем возможность коррекции поля Адрес руками
+  adFormAddress.readonly = true;
 
-  showPins(jsPins);
+  toggleState(true);
 
-  map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
+  // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
+  mapPinMain.addEventListener(`mousedown`, function (evt) {
+    if (evt.which === 1) {
+      toggleState(false);
+    }
+  });
+
+  mapPinMain.addEventListener(`keydown`, function (evt) {
+    if (evt.key === KeysCode.ENTER) {
+      toggleState(false);
+    }
+  });
 };
 
 const renderCard = function (pin) {
@@ -123,7 +205,7 @@ const renderCard = function (pin) {
 
   // В блок .popup__type выведите тип жилья offer.type: Квартира для flat, Бунгало для bungalow, Дом для house, Дворец для palace.
   someElement = cardElement.querySelector(`.popup__type`);
-  someElement.textContent = TYPES_RU[pin.offer.type];
+  someElement.textContent = typesFeatures[pin.offer.type].russian;
 
   // Выведите количество гостей и комнат offer.rooms и offer.guests в блок .popup__text--capacity строкой вида {{offer.rooms}} комнаты для {{offer.guests}} гостей. Например, 2 комнаты для 3 гостей.
   someElement = cardElement.querySelector(`.popup__text--capacity`);
@@ -180,5 +262,57 @@ const renderCard = function (pin) {
   return cardElement;
 };
 
-initMap();
+const onChangeType = function (value) {
+  adFormPrice.min = value || typesFeatures[adFormType.value].minPrice;
+  adFormPrice.placeholder = adFormPrice.min;
+};
 
+// const adFormReset = document.querySelector(`.ad-form__reset`);
+
+// adFormReset.addEventListener(`click`, function (evt) {
+//   evt.preventDefault();
+//   adForm.reset();
+//   initMap();
+//   onChangeType();
+//   // evt.preventDefault();
+// });
+
+
+adForm.addEventListener(`reset`, function (evt) {
+  evt.preventDefault();
+  adForm.reset();
+  initMap();
+  onChangeType();
+  // evt.preventDefault();
+});
+
+adFormSubmit.addEventListener(`click`, function () {
+  if ((adFormRooms.value === `100`) === (adFormGuests.value === `0`)) {
+    // оба условия или true, или оба false
+    // если оба false, надо сравнить кол-во гостей и комнат
+    // если оба true, то (adFormRooms.value > adFormGuests.value) => true
+    if (adFormRooms.value < adFormGuests.value) {
+      adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
+    } else {
+      adFormGuests.setCustomValidity(``);
+    }
+  } else {
+    // сюда попадаем если ((adFormRooms.value === `100`) !== (adFormGuests.value === `0`))
+    //    т.е. одно условие true, а другое false
+    adFormGuests.setCustomValidity(`Некорректный выбор комнат и гостей.`);
+  }
+});
+
+adFormType.addEventListener(`change`, function () {
+  onChangeType();
+});
+
+adFormTimeIn.addEventListener(`change`, function () {
+  adFormTimeOut.value = adFormTimeIn.value;
+});
+
+adFormTimeOut.addEventListener(`change`, function () {
+  adFormTimeIn.value = adFormTimeOut.value;
+});
+
+window.addEventListener(`load`, initMap);
