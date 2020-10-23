@@ -1,6 +1,5 @@
 "use strict";
 
-let isInitDone = false;
 const POINTS_AMOUNT = 8;
 const TYPES = [`palace`, `flat`, `house`, `bungalow`];
 const typesFeatures = {
@@ -35,8 +34,6 @@ const ADDRESS_INIT = `${BUTTON_STYLE_LEFT + MAFFIN_MIDDLE},${BUTTON_STYLE_TOP + 
 
 const PIN_HEIGHT = 165;
 const PIN_WIDTH_HALF = 25;
-
-const KeysCode = {ESCAPE: `Escape`, ENTER: `Enter`};
 
 const map = document.querySelector(`.map`);
 const mapPinMain = map.querySelector(`.map__pin--main`);
@@ -145,23 +142,22 @@ const toggleState = function (disabledState) {
   }
 
   if (disabledState === false) {
-
     adForm.classList.remove(`ad-form--disabled`);
 
-    if (!isInitDone) {
-
-      map.classList.remove(`map--faded`);
-
-      const jsPins = getPointsOfPins();
-
-      showPins(jsPins);
-
-      map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
-
-      isInitDone = true;
-    }
-
+    // mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
   }
+};
+
+const onClickShowPins = function () {
+  map.classList.remove(`map--faded`);
+
+  const jsPins = getPointsOfPins();
+
+  showPins(jsPins);
+
+  map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
+
+  mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
 };
 
 const initMap = function () {
@@ -173,16 +169,10 @@ const initMap = function () {
   toggleState(true);
 
   // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
-  mapPinMain.addEventListener(`mousedown`, function (evt) {
-    if (evt.which === 1) {
-      toggleState(false);
-    }
-  });
+  mapPinMain.addEventListener(`mousedown`, onClickShowPins);
 
-  mapPinMain.addEventListener(`keydown`, function (evt) {
-    if (evt.key === KeysCode.ENTER) {
-      toggleState(false);
-    }
+  mapPinMain.addEventListener(`mousedown`, function () {
+    toggleState(false);
   });
 };
 
