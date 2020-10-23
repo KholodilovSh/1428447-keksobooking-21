@@ -110,7 +110,7 @@ const getPointsOfPins = function () {
   return jsObjects;
 };
 
-const showPins = function (jsPins) {
+const showPins = function () {
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < jsPins.length; i++) {
     fragment.appendChild(renderPin(jsPins[i], i));
@@ -154,7 +154,7 @@ const onClickShowPins = function () {
 
   jsPins = getPointsOfPins();
 
-  showPins(jsPins);
+  showPins();
 
   map.addEventListener(`click`, onClickPinShowCard);
 
@@ -273,7 +273,7 @@ const onEscapeCloseCard = function (evt) {
 };
 
 const onCloseCard = function () {
-  const cardToRemove = map.querySelector('.map__card');
+  const cardToRemove = map.querySelector(`.map__card`);
   cardToRemove.remove();
   map.addEventListener(`click`, onClickPinShowCard);
 };
