@@ -118,7 +118,7 @@ const showPins = function () {
   mapPins.appendChild(fragment);
 };
 
-const renderPin = function (pin, dataSet) {
+const renderPin = function (pin) {
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
   pinElement.style.top = `${pin.offer.location.y - PIN_HEIGHT}px`;
@@ -284,7 +284,7 @@ const onCloseCard = function () {
     document.removeEventListener(`keydown`, onEscapeCloseCard);
   }
 
-  map.addEventListener(`click`, onClickPinShowCard);
+  // map.addEventListener(`click`, onClickPinShowCard);
 };
 
 const onChangeType = function (value) {
