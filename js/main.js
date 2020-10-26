@@ -122,14 +122,16 @@ const renderPin = function (pin, dataSet) {
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
   pinElement.style.top = `${pin.offer.location.y - PIN_HEIGHT}px`;
-  // pinElement.addEventListener(`click`, function () {
-  //   renderCard(pin);
-  // })
+  pinElement.addEventListener(`click`, function () {
+    if (!map.querySelector(`.map__card`)) {
+      map.insertBefore(renderCard(pin), mapFiltersContainer);
+    }
+  });
 
   const imgElement = pinElement.querySelector(`img`);
   imgElement.src = pin.author.avatar;
   imgElement.alt = pin.offer.description;
-  imgElement.dataset.jsNumber = dataSet;
+  // imgElement.dataset.jsNumber = dataSet;
 
   return pinElement;
 };
@@ -159,17 +161,17 @@ const onClickShowPins = function () {
 
   showPins();
 
-  map.addEventListener(`click`, onClickPinShowCard);
+  // map.addEventListener(`click`, onClickPinShowCard);
 
   mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
 };
 
-const onClickPinShowCard = function (evt) {
-  if (evt.target.dataset.jsNumber) {
-    map.insertBefore(renderCard(jsPins[evt.target.dataset.jsNumber]), mapFiltersContainer);
-    map.removeEventListener(`click`, onClickPinShowCard);
-  }
-};
+// const onClickPinShowCard = function (evt) {
+//   if (evt.target.dataset.jsNumber) {
+//     map.insertBefore(renderCard(jsPins[evt.target.dataset.jsNumber]), mapFiltersContainer);
+//     map.removeEventListener(`click`, onClickPinShowCard);
+//   }
+// };
 
 const initMap = function () {
 
