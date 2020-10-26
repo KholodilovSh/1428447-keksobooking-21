@@ -122,6 +122,9 @@ const renderPin = function (pin, dataSet) {
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
   pinElement.style.top = `${pin.offer.location.y - PIN_HEIGHT}px`;
+  // pinElement.addEventListener(`click`, function () {
+  //   renderCard(pin);
+  // })
 
   const imgElement = pinElement.querySelector(`img`);
   imgElement.src = pin.author.avatar;
@@ -274,7 +277,11 @@ const onEscapeCloseCard = function (evt) {
 
 const onCloseCard = function () {
   const cardToRemove = map.querySelector(`.map__card`);
-  cardToRemove.remove();
+  if (cardToRemove) {
+    cardToRemove.remove();
+    document.removeEventListener(`keydown`, onEscapeCloseCard);
+  }
+
   map.addEventListener(`click`, onClickPinShowCard);
 };
 
