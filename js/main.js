@@ -1,6 +1,5 @@
 "use strict";
 
-let isInitDone = false;
 const POINTS_AMOUNT = 8;
 const TYPES = [`palace`, `flat`, `house`, `bungalow`];
 const typesFeatures = {
@@ -36,8 +35,6 @@ const ADDRESS_INIT = `${BUTTON_STYLE_LEFT + MAFFIN_MIDDLE},${BUTTON_STYLE_TOP + 
 const PIN_HEIGHT = 165;
 const PIN_WIDTH_HALF = 25;
 
-const KeysCode = {ESCAPE: `Escape`, ENTER: `Enter`};
-
 const map = document.querySelector(`.map`);
 const mapPinMain = map.querySelector(`.map__pin--main`);
 const mapPins = map.querySelector(`.map__pins`);
@@ -57,6 +54,8 @@ const adFormGuests = adForm.querySelector(`.ad-form__guests`);
 const adFormSubmit = adForm.querySelector(`.ad-form__submit`);
 
 const mapFilters = document.querySelector(`.map__filters`);
+
+let jsPins;
 
 const getRandomNumber = function (minNumber = 0, maxNumber = 100, roundDigit = 0) {
   return minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);
@@ -111,10 +110,10 @@ const getPointsOfPins = function () {
   return jsObjects;
 };
 
-const showPins = function (jsPins) {
+const showPins = function () {
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < jsPins.length; i++) {
-    fragment.appendChild(renderPin(jsPins[i]));
+    fragment.appendChild(renderPin(jsPins[i], i));
   }
   mapPins.appendChild(fragment);
 };
@@ -123,10 +122,16 @@ const renderPin = function (pin) {
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
   pinElement.style.top = `${pin.offer.location.y - PIN_HEIGHT}px`;
+  pinElement.addEventListener(`click`, function () {
+    if (!map.querySelector(`.map__card`)) {
+      map.insertBefore(renderCard(pin), mapFiltersContainer);
+    }
+  });
 
   const imgElement = pinElement.querySelector(`img`);
   imgElement.src = pin.author.avatar;
   imgElement.alt = pin.offer.description;
+  // imgElement.dataset.jsNumber = dataSet;
 
   return pinElement;
 };
@@ -145,24 +150,28 @@ const toggleState = function (disabledState) {
   }
 
   if (disabledState === false) {
-
     adForm.classList.remove(`ad-form--disabled`);
-
-    if (!isInitDone) {
-
-      map.classList.remove(`map--faded`);
-
-      const jsPins = getPointsOfPins();
-
-      showPins(jsPins);
-
-      map.insertBefore(renderCard(jsPins[0]), mapFiltersContainer);
-
-      isInitDone = true;
-    }
-
   }
 };
+
+const onClickShowPins = function () {
+  map.classList.remove(`map--faded`);
+
+  jsPins = getPointsOfPins();
+
+  showPins();
+
+  // map.addEventListener(`click`, onClickPinShowCard);
+
+  mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
+};
+
+// const onClickPinShowCard = function (evt) {
+//   if (evt.target.dataset.jsNumber) {
+//     map.insertBefore(renderCard(jsPins[evt.target.dataset.jsNumber]), mapFiltersContainer);
+//     map.removeEventListener(`click`, onClickPinShowCard);
+//   }
+// };
 
 const initMap = function () {
 
@@ -173,16 +182,10 @@ const initMap = function () {
   toggleState(true);
 
   // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
-  mapPinMain.addEventListener(`mousedown`, function (evt) {
-    if (evt.which === 1) {
-      toggleState(false);
-    }
-  });
+  mapPinMain.addEventListener(`mousedown`, onClickShowPins);
 
-  mapPinMain.addEventListener(`keydown`, function (evt) {
-    if (evt.key === KeysCode.ENTER) {
-      toggleState(false);
-    }
+  mapPinMain.addEventListener(`mousedown`, function () {
+    toggleState(false);
   });
 };
 
@@ -259,7 +262,29 @@ const renderCard = function (pin) {
   someElement = cardElement.querySelector(`.popup__avatar`);
   someElement.src = pin.author.avatar;
 
+  const closeElement = cardElement.querySelector(`.popup__close`);
+
+  closeElement.addEventListener(`click`, onCloseCard);
+
+  document.addEventListener(`keydown`, onEscapeCloseCard);
+
   return cardElement;
+};
+
+const onEscapeCloseCard = function (evt) {
+  if (evt.key === `Escape`) {
+    onCloseCard();
+  }
+};
+
+const onCloseCard = function () {
+  const cardToRemove = map.querySelector(`.map__card`);
+  if (cardToRemove) {
+    cardToRemove.remove();
+    document.removeEventListener(`keydown`, onEscapeCloseCard);
+  }
+
+  // map.addEventListener(`click`, onClickPinShowCard);
 };
 
 const onChangeType = function (value) {
