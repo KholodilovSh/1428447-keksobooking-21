@@ -131,7 +131,6 @@ const renderPin = function (pin) {
   const imgElement = pinElement.querySelector(`img`);
   imgElement.src = pin.author.avatar;
   imgElement.alt = pin.offer.description;
-  // imgElement.dataset.jsNumber = dataSet;
 
   return pinElement;
 };
@@ -161,17 +160,8 @@ const onClickShowPins = function () {
 
   showPins();
 
-  // map.addEventListener(`click`, onClickPinShowCard);
-
   mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
 };
-
-// const onClickPinShowCard = function (evt) {
-//   if (evt.target.dataset.jsNumber) {
-//     map.insertBefore(renderCard(jsPins[evt.target.dataset.jsNumber]), mapFiltersContainer);
-//     map.removeEventListener(`click`, onClickPinShowCard);
-//   }
-// };
 
 const initMap = function () {
 
@@ -254,9 +244,6 @@ const renderCard = function (pin) {
     tempPhoto.src = pin.offer.photos[i];
     someElement.appendChild(tempPhoto);
   }
-  // <div class="popup__photos">
-  //   <img src="" class="popup__photo" width="45" height="40" alt="Фотография жилья">
-  // </div>
 
   // Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
   someElement = cardElement.querySelector(`.popup__avatar`);
@@ -283,8 +270,6 @@ const onCloseCard = function () {
     cardToRemove.remove();
     document.removeEventListener(`keydown`, onEscapeCloseCard);
   }
-
-  // map.addEventListener(`click`, onClickPinShowCard);
 };
 
 const onChangeType = function (value) {
@@ -292,23 +277,11 @@ const onChangeType = function (value) {
   adFormPrice.placeholder = adFormPrice.min;
 };
 
-// const adFormReset = document.querySelector(`.ad-form__reset`);
-
-// adFormReset.addEventListener(`click`, function (evt) {
-//   evt.preventDefault();
-//   adForm.reset();
-//   initMap();
-//   onChangeType();
-//   // evt.preventDefault();
-// });
-
-
 adForm.addEventListener(`reset`, function (evt) {
   evt.preventDefault();
   adForm.reset();
   initMap();
   onChangeType();
-  // evt.preventDefault();
 });
 
 adFormSubmit.addEventListener(`click`, function () {
