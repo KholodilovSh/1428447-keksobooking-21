@@ -2,10 +2,7 @@
 
 (function () {
 
-
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
-
-  const mapFilters = document.querySelector(`.map__filters`);
 
   const renderCard = function (pin) {
     const cardElement = cardTemplate.cloneNode(true);
@@ -86,14 +83,6 @@
     return cardElement;
   };
 
-  const toggleMap = function (disabledState) {
-    // а форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
-    mapFilters.disabled = disabledState;
-    for (let i = 0; i < mapFilters.children.length; i++) {
-      mapFilters.children[i].disabled = disabledState;
-    }
-  };
-
   const onEscapeCloseCard = function (evt) {
     if (evt.key === `Escape`) {
       onCloseCard();
@@ -101,7 +90,7 @@
   };
 
   const onCloseCard = function () {
-    const cardToRemove = window.main.map.querySelector(`.map__card`);
+    const cardToRemove = window.map.map.querySelector(`.map__card`);
     if (cardToRemove) {
       cardToRemove.remove();
       document.removeEventListener(`keydown`, onEscapeCloseCard);
@@ -109,7 +98,6 @@
   };
 
   window.card = {
-    renderCard,
-    toggleMap
+    renderCard
   };
 })();

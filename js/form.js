@@ -87,7 +87,7 @@
   adForm.addEventListener(`reset`, function (evt) {
     evt.preventDefault();
     adForm.reset();
-    window.main.initMap();
+    window.main.initSite();
     onChangeType();
   });
 
