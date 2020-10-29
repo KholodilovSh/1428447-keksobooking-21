@@ -4,6 +4,9 @@
 
   const PIN_HEIGHT = 165;
   const PIN_WIDTH_HALF = 25;
+  const BUTTON_STYLE_LEFT = 570;
+  const BUTTON_STYLE_TOP = 375;
+  const MAFFIN_MIDDLE = 33;
 
   const map = document.querySelector(`.map`);
   const mapPinMain = map.querySelector(`.map__pin--main`);
@@ -14,6 +17,10 @@
   const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 
   let jsPins;
+
+  const getAddress = function (x = BUTTON_STYLE_LEFT, y = BUTTON_STYLE_TOP) {
+    return `${x + MAFFIN_MIDDLE},${y + MAFFIN_MIDDLE}`;
+  };
 
   const toggleMap = function (disabledState) {
     // а форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
@@ -59,9 +66,11 @@
   };
 
   window.map = {
+    MAFFIN_MIDDLE,
     map,
     mapPinMain,
-    toggleMap,
-    onClickShowPins
+    getAddress,
+    onClickShowPins,
+    toggleMap
   };
 })();

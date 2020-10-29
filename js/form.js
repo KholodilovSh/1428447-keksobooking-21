@@ -2,12 +2,6 @@
 
 (function () {
 
-  // координаты адреса в неактивном состоянии
-  const BUTTON_STYLE_LEFT = 570;
-  const BUTTON_STYLE_TOP = 375;
-  const MAFFIN_MIDDLE = 33;
-  const ADDRESS_INIT = `${BUTTON_STYLE_LEFT + MAFFIN_MIDDLE},${BUTTON_STYLE_TOP + MAFFIN_MIDDLE}`;
-
   const typesFeatures = {
     flat: {
       russian: `Квартира`,
@@ -36,7 +30,9 @@
   const adFormSubmit = adForm.querySelector(`.ad-form__submit`);
 
   const initForm = function () {
-    adFormAddress.value = ADDRESS_INIT;
+
+    // координаты адреса в неактивном состоянии
+    adFormAddress.value = window.map.getAddress();
     // закрываем возможность коррекции поля Адрес руками
     adFormAddress.readonly = true;
   };
@@ -96,6 +92,7 @@
   });
 
   window.form = {
+    adFormAddress,
     typesFeatures,
     initForm,
     toggleForm
