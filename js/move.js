@@ -36,11 +36,15 @@
         window.map.mapPinMain.style.top = nextY + `px`;
         window.map.mapPinMain.style.left = nextX + `px`;
         window.form.adFormAddress.value = window.map.getAddress(nextX, nextY);
+      } else {
+        onMoueUp();
       }
     };
 
     const onMoueUp = function (upEvt) {
-      upEvt.preventDefault();
+      if (upEvt) {
+        upEvt.preventDefault();
+      }
 
       document.removeEventListener(`mousemove`, onMouseMove);
       document.removeEventListener(`mouseup`, onMoueUp);
