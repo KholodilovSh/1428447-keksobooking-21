@@ -57,6 +57,8 @@
   };
 
   window.data = {
+    RANGE_X,
+    RANGE_Y,
     getPointsOfPins
   };
 
