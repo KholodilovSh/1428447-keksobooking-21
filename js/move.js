@@ -16,8 +16,8 @@
 
     const isMousePointerOnMap = function (x, y) {
       return (
-        window.data.RANGE_X[0] <= x - window.map.MAFFIN_MIDDLE &&
-        window.data.RANGE_X[1] >= x - window.map.MAFFIN_MIDDLE
+        window.data.RANGE_X[0] + window.map.map.offsetLeft <= x - window.map.MAFFIN_MIDDLE &&
+        window.data.RANGE_X[1] + window.map.map.offsetLeft >= x - window.map.MAFFIN_MIDDLE
         &&
         window.data.RANGE_Y[0] <= y - window.map.MAFFIN_MIDDLE &&
         window.data.RANGE_Y[1] >= y - window.map.MAFFIN_MIDDLE);
