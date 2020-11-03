@@ -40,8 +40,8 @@
 
   const renderPin = function (pin) {
     const pinElement = pinTemplate.cloneNode(true);
-    pinElement.style.left = `${pin.offer.location.x - PIN_WIDTH_HALF}px`;
-    pinElement.style.top = `${pin.offer.location.y - PIN_HEIGHT}px`;
+    pinElement.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
+    pinElement.style.top = `${pin.location.y - PIN_HEIGHT}px`;
     pinElement.addEventListener(`click`, function () {
       if (!map.querySelector(`.map__card`)) {
         map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
@@ -55,12 +55,19 @@
     return pinElement;
   };
 
+  const successHandler = function (data) {
+    jsPins = data;
+    showPins();
+  };
+
   const onClickShowPins = function () {
     map.classList.remove(`map--faded`);
 
-    jsPins = window.data.getPointsOfPins();
+    // jsPins = window.data.getPointsOfPins();
 
-    showPins();
+    // showPins();
+
+    window.server.load(successHandler, window.utils.errorHandler);
 
     mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
   };
