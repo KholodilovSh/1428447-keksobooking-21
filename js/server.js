@@ -33,14 +33,14 @@ const makeRequestToServer = function (onLoad, onError) {
     if (xhr.status === StatusCode.OK) {
       onLoad(xhr.response);
     } else {
-      onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
+      onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText, onLoad);
     }
   });
   xhr.addEventListener(`error`, function () {
-    onError(`Произошла ошибка соединения`);
+    onError(`Произошла ошибка соединения`, onLoad);
   });
   xhr.addEventListener(`timeout`, function () {
-    onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
+    onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`, onLoad);
   });
 
   xhr.timeout = TIMEOUT_IN_MS;

@@ -45,6 +45,13 @@
     mapPins.appendChild(fragment);
   };
 
+  const clearPins = function () {
+    const pins = mapPins.children;
+    for (let i = pins.length - 1; i >= 2; i--) {
+      pins[i].remove();
+    }
+  };
+
   const renderPin = function (pin) {
     const pinElement = pinTemplate.cloneNode(true);
     pinElement.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
@@ -79,6 +86,7 @@
     MAFFIN_MIDDLE,
     map,
     mapPinMain,
+    clearPins,
     getAddress,
     onClickShowPins,
     showAddress,

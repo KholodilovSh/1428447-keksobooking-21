@@ -14,7 +14,7 @@
     return arrayItems[getRandomNumber(0, arrayItems.length - 1)];
   };
 
-  const errorHandler = function (errorMessage) {
+  const errorHandler = function (errorMessage, onLoad) {
     const node = window.server.errorTemplate.cloneNode(true);
     const pElement = node.querySelector(`p`);
     pElement.textContent = errorMessage;
@@ -22,7 +22,7 @@
     const buttonElement = node.querySelector(`button`);
     buttonElement.addEventListener(`click`, function () {
       node.remove();
-      window.server.load(window.map.successHandler, window.utils.errorHandler);
+      window.server.load(onLoad, window.utils.errorHandler);
     });
 
     document.body.insertAdjacentElement(`afterbegin`, node);

@@ -33,8 +33,7 @@
 
     // координаты адреса в неактивном состоянии
     adFormAddress.value = window.map.showAddress(window.map.getAddress());
-    // закрываем возможность коррекции поля Адрес руками
-    adFormAddress.readonly = true;
+    // закрываем возможность коррекции поля Адрес руками указав соответсвующий атрибут в разметке
   };
 
   const toggleForm = function (disabledState) {
@@ -57,7 +56,13 @@
     adFormTimeIn.value = adFormTimeOut.value;
   });
 
-  adFormSubmit.addEventListener(`click`, function () {
+  const onLoadForm = function () {
+    window.map.map.classList.add(`map--faded`);
+    window.map.clearPins();
+    window.main.initSite();
+  };
+
+  adFormSubmit.addEventListener(`click`, function (evtClick) {
     if ((adFormRooms.value === `100`) === (adFormGuests.value === `0`)) {
       // оба условия или true, или оба false
       // если оба false, надо сравнить кол-во гостей и комнат
@@ -66,6 +71,8 @@
         adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
       } else {
         adFormGuests.setCustomValidity(``);
+        window.server.save(new FormData(adForm), onLoadForm, window.utils.errorHandler);
+        evtClick.preventDefault();
       }
     } else {
       // сюда попадаем если ((adFormRooms.value === `100`) !== (adFormGuests.value === `0`))
