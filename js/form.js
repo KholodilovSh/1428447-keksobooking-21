@@ -32,7 +32,7 @@
   const initForm = function () {
 
     // координаты адреса в неактивном состоянии
-    adFormAddress.value = window.map.getAddress();
+    adFormAddress.value = window.map.showAddress(window.map.getAddress());
     // закрываем возможность коррекции поля Адрес руками
     adFormAddress.readonly = true;
   };

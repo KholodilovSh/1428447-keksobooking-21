@@ -19,7 +19,14 @@
   let jsPins;
 
   const getAddress = function (x = BUTTON_STYLE_LEFT, y = BUTTON_STYLE_TOP) {
-    return `${x + MAFFIN_MIDDLE},${y + MAFFIN_MIDDLE}`;
+    return {
+      x: x + MAFFIN_MIDDLE,
+      y: y + MAFFIN_MIDDLE
+    };
+  };
+
+  const showAddress = function (location) {
+    return `${location.x},${location.y}`;
   };
 
   const toggleMap = function (disabledState) {
@@ -63,10 +70,6 @@
   const onClickShowPins = function () {
     map.classList.remove(`map--faded`);
 
-    // jsPins = window.data.getPointsOfPins();
-
-    // showPins();
-
     window.server.load(successHandler, window.utils.errorHandler);
 
     mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
@@ -78,6 +81,7 @@
     mapPinMain,
     getAddress,
     onClickShowPins,
+    showAddress,
     toggleMap
   };
 })();
