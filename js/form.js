@@ -59,6 +59,9 @@
   const onLoadForm = function () {
     window.map.map.classList.add(`map--faded`);
     window.map.clearPins();
+    window.map.mapPinMain.style.left = window.main.pinMainLocation.x;
+    window.map.mapPinMain.style.top = window.main.pinMainLocation.y;
+    adForm.reset();
     window.main.initSite();
   };
 
