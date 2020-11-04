@@ -1,6 +1,6 @@
 "use strict";
 
-const TIMEOUT_IN_MS = 5000;
+const TIMEOUT_IN_MS = 1000;
 
 const StatusCode = {
   OK: 200
@@ -10,6 +10,8 @@ const ServerUrl = {
   LOAD: `https://21.javascript.pages.academy/keksobooking/data`,
   SAVE: `https://21.javascript.pages.academy/keksobooking`
 };
+
+const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 
 const load = function (onLoad, onError) {
   const xhr = makeRequestToServer(onLoad, onError);
@@ -47,6 +49,7 @@ const makeRequestToServer = function (onLoad, onError) {
 };
 
 window.server = {
+  errorTemplate,
   load,
   save
 };

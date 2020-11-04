@@ -82,6 +82,7 @@
     getAddress,
     onClickShowPins,
     showAddress,
+    successHandler,
     toggleMap
   };
 })();

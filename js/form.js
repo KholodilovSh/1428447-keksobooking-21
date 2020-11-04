@@ -49,7 +49,6 @@
     }
   };
 
-
   adFormTimeIn.addEventListener(`change`, function () {
     adFormTimeOut.value = adFormTimeIn.value;
   });

@@ -15,14 +15,16 @@
   };
 
   const errorHandler = function (errorMessage) {
-    const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
+    const node = window.server.errorTemplate.cloneNode(true);
+    const pElement = node.querySelector(`p`);
+    pElement.textContent = errorMessage;
 
-    node.textContent = errorMessage;
+    const buttonElement = node.querySelector(`button`);
+    buttonElement.addEventListener(`click`, function () {
+      node.remove();
+      window.server.load(window.map.successHandler, window.utils.errorHandler);
+    });
+
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
