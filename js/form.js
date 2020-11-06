@@ -32,9 +32,8 @@
   const initForm = function () {
 
     // координаты адреса в неактивном состоянии
-    adFormAddress.value = window.map.getAddress();
-    // закрываем возможность коррекции поля Адрес руками
-    adFormAddress.readonly = true;
+    adFormAddress.value = window.map.showAddress(window.map.getAddress());
+    // закрываем возможность коррекции поля Адрес руками указав соответсвующий атрибут в разметке
   };
 
   const toggleForm = function (disabledState) {
@@ -49,7 +48,6 @@
     }
   };
 
-
   adFormTimeIn.addEventListener(`change`, function () {
     adFormTimeOut.value = adFormTimeIn.value;
   });
@@ -58,7 +56,18 @@
     adFormTimeIn.value = adFormTimeOut.value;
   });
 
-  adFormSubmit.addEventListener(`click`, function () {
+  const reinitForm = function () {
+    window.map.map.classList.add(`map--faded`);
+    window.map.clearPins();
+    window.map.mapPinMain.style.left = window.main.pinMainLocation.x;
+    window.map.mapPinMain.style.top = window.main.pinMainLocation.y;
+    adForm.reset();
+    window.main.initSite();
+    onChangeType();
+  };
+
+
+  adFormSubmit.addEventListener(`click`, function (evtClick) {
     if ((adFormRooms.value === `100`) === (adFormGuests.value === `0`)) {
       // оба условия или true, или оба false
       // если оба false, надо сравнить кол-во гостей и комнат
@@ -67,6 +76,8 @@
         adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
       } else {
         adFormGuests.setCustomValidity(``);
+        window.server.save(new FormData(adForm), window.utils.successHandler, window.utils.errorHandler);
+        evtClick.preventDefault();
       }
     } else {
       // сюда попадаем если ((adFormRooms.value === `100`) !== (adFormGuests.value === `0`))
@@ -80,12 +91,12 @@
     adFormPrice.placeholder = adFormPrice.min;
   };
 
-  adForm.addEventListener(`reset`, function (evt) {
-    evt.preventDefault();
-    adForm.reset();
-    window.main.initSite();
-    onChangeType();
-  });
+  // если раскомментировать, не сбрасывает форму совсем
+  // adForm.addEventListener(`reset`, function (evt) {
+  //   evt.preventDefault();
+  //   adForm.reset();
+  //   onChangeType();
+  // });
 
   adFormType.addEventListener(`change`, function () {
     onChangeType();
@@ -95,6 +106,7 @@
     adFormAddress,
     typesFeatures,
     initForm,
+    reinitForm,
     toggleForm
   };
 })();

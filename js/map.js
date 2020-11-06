@@ -19,7 +19,14 @@
   let jsPins;
 
   const getAddress = function (x = BUTTON_STYLE_LEFT, y = BUTTON_STYLE_TOP) {
-    return `${x + MAFFIN_MIDDLE},${y + MAFFIN_MIDDLE}`;
+    return {
+      x: x + MAFFIN_MIDDLE,
+      y: y + MAFFIN_MIDDLE
+    };
+  };
+
+  const showAddress = function (location) {
+    return `${location.x},${location.y}`;
   };
 
   const toggleMap = function (disabledState) {
@@ -36,6 +43,13 @@
       fragment.appendChild(renderPin(jsPins[i], i));
     }
     mapPins.appendChild(fragment);
+  };
+
+  const clearPins = function () {
+    const pins = mapPins.children;
+    for (let i = pins.length - 1; i >= 2; i--) {
+      pins[i].remove();
+    }
   };
 
   const renderPin = function (pin) {
@@ -63,10 +77,6 @@
   const onClickShowPins = function () {
     map.classList.remove(`map--faded`);
 
-    // jsPins = window.data.getPointsOfPins();
-
-    // showPins();
-
     window.server.load(successHandler, window.utils.errorHandler);
 
     mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
@@ -76,8 +86,11 @@
     MAFFIN_MIDDLE,
     map,
     mapPinMain,
+    clearPins,
     getAddress,
     onClickShowPins,
+    showAddress,
+    successHandler,
     toggleMap
   };
 })();
