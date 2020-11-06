@@ -12,6 +12,7 @@ const ServerUrl = {
 };
 
 const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
 
 const load = function (onLoad, onError) {
   const xhr = makeRequestToServer(onLoad, onError);
@@ -50,6 +51,7 @@ const makeRequestToServer = function (onLoad, onError) {
 
 window.server = {
   errorTemplate,
+  successTemplate,
   load,
   save
 };

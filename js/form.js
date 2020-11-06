@@ -56,14 +56,16 @@
     adFormTimeIn.value = adFormTimeOut.value;
   });
 
-  const onLoadForm = function () {
+  const reinitForm = function () {
     window.map.map.classList.add(`map--faded`);
     window.map.clearPins();
     window.map.mapPinMain.style.left = window.main.pinMainLocation.x;
     window.map.mapPinMain.style.top = window.main.pinMainLocation.y;
     adForm.reset();
     window.main.initSite();
+    onChangeType();
   };
+
 
   adFormSubmit.addEventListener(`click`, function (evtClick) {
     if ((adFormRooms.value === `100`) === (adFormGuests.value === `0`)) {
@@ -74,7 +76,7 @@
         adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
       } else {
         adFormGuests.setCustomValidity(``);
-        window.server.save(new FormData(adForm), onLoadForm, window.utils.errorHandler);
+        window.server.save(new FormData(adForm), window.utils.successHandler, window.utils.errorHandler);
         evtClick.preventDefault();
       }
     } else {
@@ -89,12 +91,12 @@
     adFormPrice.placeholder = adFormPrice.min;
   };
 
-  adForm.addEventListener(`reset`, function (evt) {
-    evt.preventDefault();
-    adForm.reset();
-    window.main.initSite();
-    onChangeType();
-  });
+  // если раскомментировать, не сбрасывает форму совсем
+  // adForm.addEventListener(`reset`, function (evt) {
+  //   evt.preventDefault();
+  //   adForm.reset();
+  //   onChangeType();
+  // });
 
   adFormType.addEventListener(`change`, function () {
     onChangeType();
@@ -104,6 +106,7 @@
     adFormAddress,
     typesFeatures,
     initForm,
+    reinitForm,
     toggleForm
   };
 })();
