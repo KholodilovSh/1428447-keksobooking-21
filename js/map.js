@@ -70,11 +70,14 @@
   };
 
   const successHandler = function (data) {
+    mapFilters.style.visibility = `visible`;
     jsPins = data;
     showPins();
   };
 
   const onClickShowPins = function () {
+
+    mapFilters.style.visibility = `hidden`;
     map.classList.remove(`map--faded`);
 
     window.server.load(successHandler, window.utils.errorHandler);
