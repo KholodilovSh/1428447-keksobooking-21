@@ -94,7 +94,7 @@
   };
 
   // если раскомментировать, не сбрасывает форму совсем
-  adForm.addEventListener(`reset`, function (evt) {
+  adForm.addEventListener(`reset`, function () {
     // evt.preventDefault();
     // adForm.reset();
     onChangeType();

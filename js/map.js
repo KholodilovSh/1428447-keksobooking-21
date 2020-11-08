@@ -2,6 +2,7 @@
 
 (function () {
 
+  const PINS_NO_MORE = 5;
   const PIN_HEIGHT = 165;
   const PIN_WIDTH_HALF = 25;
   const BUTTON_STYLE_LEFT = 570;
@@ -38,9 +39,21 @@
   };
 
   const showPins = function () {
+
     const fragment = document.createDocumentFragment();
+    let pinsShown = 0;
+
     for (let i = 0; i < jsPins.length; i++) {
-      fragment.appendChild(renderPin(jsPins[i], i));
+
+      if (window.filters.useFilters(jsPins[i])) {
+        fragment.appendChild(renderPin(jsPins[i], i));
+        pinsShown++;
+
+        if (pinsShown === PINS_NO_MORE) {
+          break;
+        }
+      }
+
     }
     mapPins.appendChild(fragment);
   };
@@ -70,14 +83,14 @@
   };
 
   const successHandler = function (data) {
-    mapFilters.style.visibility = `visible`;
+    window.filters.toggleFilters(true);
     jsPins = data;
     showPins();
   };
 
   const onClickShowPins = function () {
 
-    mapFilters.style.visibility = `hidden`;
+    window.filters.toggleFilters(false);
     map.classList.remove(`map--faded`);
 
     window.server.load(successHandler, window.utils.errorHandler);
@@ -88,11 +101,13 @@
   window.map = {
     MAFFIN_MIDDLE,
     map,
+    mapFilters,
     mapPinMain,
     clearPins,
     getAddress,
     onClickShowPins,
     showAddress,
+    showPins,
     successHandler,
     toggleMap
   };
