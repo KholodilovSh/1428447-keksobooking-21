@@ -45,6 +45,8 @@
 
     if (disabledState === false) {
       adForm.classList.remove(`ad-form--disabled`);
+    } else {
+      adForm.classList.add(`ad-form--disabled`);
     }
   };
 
@@ -92,11 +94,11 @@
   };
 
   // если раскомментировать, не сбрасывает форму совсем
-  // adForm.addEventListener(`reset`, function (evt) {
-  //   evt.preventDefault();
-  //   adForm.reset();
-  //   onChangeType();
-  // });
+  adForm.addEventListener(`reset`, function (evt) {
+    // evt.preventDefault();
+    // adForm.reset();
+    onChangeType();
+  });
 
   adFormType.addEventListener(`change`, function () {
     onChangeType();
