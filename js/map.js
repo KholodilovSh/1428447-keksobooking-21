@@ -38,25 +38,46 @@
     }
   };
 
-  const showPins = function () {
+  const showPins = function (filteredPins) {
 
     const fragment = document.createDocumentFragment();
     let pinsShown = 0;
 
-    for (let i = 0; i < jsPins.length; i++) {
+    clearPins();
 
-      if (window.filters.useFilters(jsPins[i])) {
-        fragment.appendChild(renderPin(jsPins[i], i));
-        pinsShown++;
+    for (let i = 0; i < filteredPins.length; i++) {
 
-        if (pinsShown === PINS_NO_MORE) {
-          break;
-        }
+      fragment.appendChild(renderPin(filteredPins[i], i));
+      pinsShown++;
+
+      if (pinsShown === PINS_NO_MORE) {
+        break;
       }
-
     }
     mapPins.appendChild(fragment);
   };
+
+  // const showPins = function () {
+
+  //   const fragment = document.createDocumentFragment();
+  //   let pinsShown = 0;
+
+  //   clearPins();
+
+  //   for (let i = 0; i < jsPins.length; i++) {
+
+  //     if (window.filters.filterByType(jsPins[i])) {
+  //       fragment.appendChild(renderPin(jsPins[i], i));
+  //       pinsShown++;
+
+  //       if (pinsShown === PINS_NO_MORE) {
+  //         break;
+  //       }
+  //     }
+
+  //   }
+  //   mapPins.appendChild(fragment);
+  // };
 
   const clearPins = function () {
     const pins = mapPins.children;
@@ -84,8 +105,8 @@
 
   const successHandler = function (data) {
     window.filters.toggleFilters(true);
-    jsPins = data;
-    showPins();
+    window.map.jsPins = data;
+    showPins(window.filters.filterPins());
   };
 
   const onClickShowPins = function () {
@@ -100,6 +121,7 @@
 
   window.map = {
     MAFFIN_MIDDLE,
+    jsPins,
     map,
     mapFilters,
     mapPinMain,

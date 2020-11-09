@@ -4,8 +4,19 @@
 
   const typeFilter = window.map.mapFilters.querySelector(`.map__filter--js-type`);
 
-  const useFilters = function (pin) {
+  const filterByType = function (pin) {
     return (typeFilter.value === `any` || typeFilter.value === pin.offer.type);
+  };
+
+  const filterPins = function () {
+    const filteredPins = [];
+    for (let i = 0; i < window.map.jsPins.length; i++) {
+      if (filterByType(window.map.jsPins[i])) {
+        filteredPins.push(window.map.jsPins[i]);
+      }
+    }
+
+    return filteredPins;
   };
 
   const toggleFilters = function (toggle) {
@@ -19,14 +30,13 @@
   };
 
   const onChangeFilter = function () {
-    window.map.clearPins();
-    window.map.showPins();
+    window.map.showPins(filterPins());
     window.form.toggleForm(true);
   };
 
   window.filters = {
-    typeFilter,
     toggleFilters,
-    useFilters
+    filterByType,
+    filterPins
   };
 })();
