@@ -5,12 +5,7 @@
   const typeFilter = window.map.mapFilters.querySelector(`.map__filter--js-type`);
 
   const useFilters = function (pin) {
-    let showPin = false;
-    if (typeFilter.value === `any` || typeFilter.value === pin.offer.type) {
-      showPin = true;
-    }
-
-    return showPin;
+    return (typeFilter.value === `any` || typeFilter.value === pin.offer.type);
   };
 
   const toggleFilters = function (toggle) {
