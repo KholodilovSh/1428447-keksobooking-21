@@ -43,7 +43,7 @@
       adFieldsets[i].disabled = disabledState;
     }
 
-    if (disabledState === false) {
+    if (!disabledState) {
       adForm.classList.remove(`ad-form--disabled`);
     } else {
       adForm.classList.add(`ad-form--disabled`);
