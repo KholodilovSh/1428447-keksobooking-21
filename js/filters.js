@@ -2,6 +2,9 @@
 
 (function () {
 
+  const SHOW_FILTERS = true;
+  const HIDE_FILTERS = false;
+
   const typeFilter = window.map.mapFilters.querySelector(`.map__filter--js-type`);
 
   const filterByType = function (pin) {
@@ -19,14 +22,12 @@
     return filteredPins;
   };
 
-  const toggleFilters = function (toggle) {
+  const showFilters = function (toggle) {
     window.map.mapFilters.style.visibility = (toggle) ? `visible` : `hidden`;
+  };
 
-    if (toggle) {
-      typeFilter.addEventListener(`change`, onChangeFilter);
-    } else {
-      typeFilter.removeEventListener(`change`, onChangeFilter);
-    }
+  const initFilters = function () {
+    window.map.mapFilters.addEventListener(`change`, onChangeFilter);
   };
 
   const onChangeFilter = function () {
@@ -35,7 +36,10 @@
   };
 
   window.filters = {
-    toggleFilters,
+    SHOW_FILTERS,
+    HIDE_FILTERS,
+    initFilters,
+    showFilters,
     filterByType,
     filterPins
   };

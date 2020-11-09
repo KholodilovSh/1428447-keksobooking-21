@@ -57,28 +57,6 @@
     mapPins.appendChild(fragment);
   };
 
-  // const showPins = function () {
-
-  //   const fragment = document.createDocumentFragment();
-  //   let pinsShown = 0;
-
-  //   clearPins();
-
-  //   for (let i = 0; i < jsPins.length; i++) {
-
-  //     if (window.filters.filterByType(jsPins[i])) {
-  //       fragment.appendChild(renderPin(jsPins[i], i));
-  //       pinsShown++;
-
-  //       if (pinsShown === PINS_NO_MORE) {
-  //         break;
-  //       }
-  //     }
-
-  //   }
-  //   mapPins.appendChild(fragment);
-  // };
-
   const clearPins = function () {
     const pins = mapPins.children;
     for (let i = pins.length - 1; i >= 2; i--) {
@@ -104,14 +82,15 @@
   };
 
   const successHandler = function (data) {
-    window.filters.toggleFilters(true);
+    window.filters.initFilters();
+    window.filters.showFilters(window.filters.SHOW_FILTERS);
     window.map.jsPins = data;
     showPins(window.filters.filterPins());
   };
 
   const onClickShowPins = function () {
 
-    window.filters.toggleFilters(false);
+    window.filters.showFilters(window.filters.HIDE_FILTERS);
     map.classList.remove(`map--faded`);
 
     window.server.load(successHandler, window.utils.errorHandler);
