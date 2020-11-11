@@ -98,6 +98,7 @@
   };
 
   window.card = {
+    onCloseCard,
     renderCard
   };
 })();
