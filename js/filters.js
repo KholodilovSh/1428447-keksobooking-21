@@ -108,14 +108,21 @@
 
   const onChangeFilter = function () {
 
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
+    // if (lastTimeout) {
+    //   window.clearTimeout(lastTimeout);
+    // }
 
-    lastTimeout = window.setTimeout(function () {
-      window.map.showPins(filterPins());
-      window.form.toggleForm(true);
-    }, DEBOUNCE_INTERVAL);
+    // lastTimeout = window.setTimeout(function () {
+    //   window.map.showPins(filterPins());
+    //   window.form.toggleForm(true);
+    // }, DEBOUNCE_INTERVAL);
+
+    window.debounce.useDebounce(onUseDebounce);
+  };
+
+  const onUseDebounce = function () {
+    window.map.showPins(filterPins());
+    window.form.toggleForm(true);
   };
 
   window.filters = {
