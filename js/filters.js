@@ -5,6 +5,9 @@
   const SHOW_FILTERS = true;
   const HIDE_FILTERS = false;
 
+  const DEBOUNCE_INTERVAL = 500; // ms
+  let lastTimeout;
+
   const typeFilter = window.map.mapFilters.querySelector(`#housing-type`);
   const priceFilter = window.map.mapFilters.querySelector(`#housing-price`);
   const roomsFilter = window.map.mapFilters.querySelector(`#housing-rooms`);
@@ -104,8 +107,15 @@
   };
 
   const onChangeFilter = function () {
-    window.map.showPins(filterPins());
-    window.form.toggleForm(true);
+
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+
+    lastTimeout = window.setTimeout(function () {
+      window.map.showPins(filterPins());
+      window.form.toggleForm(true);
+    }, DEBOUNCE_INTERVAL);
   };
 
   window.filters = {
