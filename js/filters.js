@@ -4,6 +4,10 @@
 
   const SHOW_FILTERS = true;
   const HIDE_FILTERS = false;
+  const PriceRanges = {
+    LOW_MIDDLE: 10000,
+    MIDDLE_HIGH: 50000
+  };
 
   const typeFilter = window.map.mapFilters.querySelector(`#housing-type`);
   const priceFilter = window.map.mapFilters.querySelector(`#housing-price`);
@@ -63,11 +67,11 @@
       case `any` :
         return true;
       case `low` :
-        return pin.offer.price <= 10000;
+        return pin.offer.price <= PriceRanges.LOW_MIDDLE;
       case `middle`:
-        return pin.offer.price > 10000 && pin.offer.price <= 50000;
+        return pin.offer.price > PriceRanges.LOW_MIDDLE && pin.offer.price <= PriceRanges.MIDDLE_HIGH;
       case `high` :
-        return pin.offer.price > 50000;
+        return pin.offer.price > PriceRanges.MIDDLE_HIGH;
     }
     return null;
   };
