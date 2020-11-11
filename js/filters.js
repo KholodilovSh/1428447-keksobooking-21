@@ -15,39 +15,17 @@
   const guestsFilter = window.map.mapFilters.querySelector(`#housing-guests`);
 
   const featuresFilters = window.map.mapFilters.querySelector(`#housing-features`);
-  const wifiFilter = featuresFilters.querySelector(`#filter-wifi`);
-  const dishwasherFilter = featuresFilters.querySelector(`#filter-dishwasher`);
-  const parkingFilter = featuresFilters.querySelector(`#filter-parking`);
-  const washerFilter = featuresFilters.querySelector(`#filter-washer`);
-  const elevatorFilter = featuresFilters.querySelector(`#filter-elevator`);
-  const conditionerFilter = featuresFilters.querySelector(`#filter-conditioner`);
+  const arrayCheckBox = featuresFilters.querySelectorAll(`.map__checkbox`);
 
-  const filterByWifi = function (pin) {
-    return filterByFeature(pin, wifiFilter, `wifi`);
-  };
-
-  const filterByDishwasher = function (pin) {
-    return filterByFeature(pin, dishwasherFilter, `dishwasher`);
-  };
-
-  const filterByParking = function (pin) {
-    return filterByFeature(pin, parkingFilter, `parking`);
-  };
-
-  const filterByWasher = function (pin) {
-    return filterByFeature(pin, washerFilter, `washer`);
-  };
-
-  const filterByElevator = function (pin) {
-    return filterByFeature(pin, elevatorFilter, `elevator`);
-  };
-
-  const filterByConditioner = function (pin) {
-    return filterByFeature(pin, conditionerFilter, `conditioner`);
-  };
-
-  const filterByFeature = function (pin, featureCheckBox, word) {
-    return (!featureCheckBox.checked) || pin.offer.features.includes(word);
+  const filterByChecks = function (pin) {
+    let toShow = true;
+    for (let i = 0; i < arrayCheckBox.length; i++) {
+      if (arrayCheckBox[i].checked && !pin.offer.features.includes(arrayCheckBox[i].value)) {
+        toShow = false;
+        break;
+      }
+    }
+    return toShow;
   };
 
   const filterByType = function (pin) {
@@ -86,12 +64,7 @@
       filterByRooms(window.map.jsPins[i]) &&
       filterByGuests(window.map.jsPins[i]) &&
       filterByPrice(window.map.jsPins[i]) &&
-      filterByWifi(window.map.jsPins[i]) &&
-      filterByDishwasher(window.map.jsPins[i]) &&
-      filterByParking(window.map.jsPins[i]) &&
-      filterByWasher(window.map.jsPins[i]) &&
-      filterByElevator(window.map.jsPins[i]) &&
-      filterByConditioner(window.map.jsPins[i])) {
+      filterByChecks(window.map.jsPins[i])) {
 
         filteredPins.push(window.map.jsPins[i]);
         j++;
