@@ -41,18 +41,13 @@
   const showPins = function (filteredPins) {
 
     const fragment = document.createDocumentFragment();
-    let pinsShown = 0;
 
     clearPins();
 
     for (let i = 0; i < filteredPins.length; i++) {
 
       fragment.appendChild(renderPin(filteredPins[i], i));
-      pinsShown++;
 
-      if (pinsShown === PINS_NO_MORE) {
-        break;
-      }
     }
     mapPins.appendChild(fragment);
   };
@@ -100,6 +95,7 @@
 
   window.map = {
     MAFFIN_MIDDLE,
+    PINS_NO_MORE,
     jsPins,
     map,
     mapFilters,

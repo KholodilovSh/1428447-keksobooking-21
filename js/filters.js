@@ -5,9 +5,6 @@
   const SHOW_FILTERS = true;
   const HIDE_FILTERS = false;
 
-  const DEBOUNCE_INTERVAL = 500; // ms
-  let lastTimeout;
-
   const typeFilter = window.map.mapFilters.querySelector(`#housing-type`);
   const priceFilter = window.map.mapFilters.querySelector(`#housing-price`);
   const roomsFilter = window.map.mapFilters.querySelector(`#housing-rooms`);
@@ -80,7 +77,7 @@
 
     window.card.onCloseCard();
 
-    for (let i = 0; i < window.map.jsPins.length; i++) {
+    for (let i = 0, j = 0; i < window.map.jsPins.length && j < window.map.PINS_NO_MORE; i++) {
       if (filterByType(window.map.jsPins[i]) &&
       filterByRooms(window.map.jsPins[i]) &&
       filterByGuests(window.map.jsPins[i]) &&
@@ -91,7 +88,9 @@
       filterByWasher(window.map.jsPins[i]) &&
       filterByElevator(window.map.jsPins[i]) &&
       filterByConditioner(window.map.jsPins[i])) {
+
         filteredPins.push(window.map.jsPins[i]);
+        j++;
       }
     }
 
@@ -108,16 +107,8 @@
 
   const onChangeFilter = function () {
 
-    // if (lastTimeout) {
-    //   window.clearTimeout(lastTimeout);
-    // }
-
-    // lastTimeout = window.setTimeout(function () {
-    //   window.map.showPins(filterPins());
-    //   window.form.toggleForm(true);
-    // }, DEBOUNCE_INTERVAL);
-
     window.debounce.useDebounce(onUseDebounce);
+
   };
 
   const onUseDebounce = function () {
