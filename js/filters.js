@@ -79,7 +79,18 @@
   };
 
   const initFilters = function () {
+    resetFilters();
     window.map.mapFilters.addEventListener(`change`, onChangeFilter);
+  };
+
+  const resetFilters = function () {
+    typeFilter.value = `any`;
+    roomsFilter.value = `any`;
+    priceFilter.value = `any`;
+    guestsFilter.value = `any`;
+    for (let i = 0; i < arrayCheckBox.length; i++) {
+      arrayCheckBox[i].checked = false;
+    }
   };
 
   const onChangeFilter = function () {
@@ -90,7 +101,6 @@
 
   const onUseDebounce = function () {
     window.map.showPins(filterPins());
-    window.form.toggleForm(true);
   };
 
   window.filters = {
@@ -98,7 +108,6 @@
     HIDE_FILTERS,
     initFilters,
     showFilters,
-    filterByType,
     filterPins
   };
 })();
