@@ -64,9 +64,10 @@
     pinElement.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
     pinElement.style.top = `${pin.location.y - PIN_HEIGHT}px`;
     pinElement.addEventListener(`click`, function () {
-      if (!map.querySelector(`.map__card`)) {
-        map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
+      if (map.querySelector(`.map__card`)) {
+        window.card.onCloseCard();
       }
+      map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
     });
 
     const imgElement = pinElement.querySelector(`img`);
