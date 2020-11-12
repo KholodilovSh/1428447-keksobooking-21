@@ -41,18 +41,13 @@
   const showPins = function (filteredPins) {
 
     const fragment = document.createDocumentFragment();
-    let pinsShown = 0;
 
     clearPins();
 
     for (let i = 0; i < filteredPins.length; i++) {
 
       fragment.appendChild(renderPin(filteredPins[i], i));
-      pinsShown++;
 
-      if (pinsShown === PINS_NO_MORE) {
-        break;
-      }
     }
     mapPins.appendChild(fragment);
   };
@@ -69,9 +64,10 @@
     pinElement.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
     pinElement.style.top = `${pin.location.y - PIN_HEIGHT}px`;
     pinElement.addEventListener(`click`, function () {
-      if (!map.querySelector(`.map__card`)) {
-        map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
+      if (map.querySelector(`.map__card`)) {
+        window.card.onCloseCard();
       }
+      map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
     });
 
     const imgElement = pinElement.querySelector(`img`);
@@ -100,6 +96,7 @@
 
   window.map = {
     MAFFIN_MIDDLE,
+    PINS_NO_MORE,
     jsPins,
     map,
     mapFilters,
