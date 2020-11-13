@@ -78,7 +78,7 @@
         adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
       } else {
         adFormGuests.setCustomValidity(``);
-        window.server.save(new FormData(adForm), window.utils.successHandler, window.utils.errorHandler);
+        window.server.save(new FormData(adForm), window.utils.onSuccess, window.utils.onError);
         evtClick.preventDefault();
       }
     } else {

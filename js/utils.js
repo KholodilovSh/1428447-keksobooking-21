@@ -14,7 +14,7 @@
     return arrayItems[getRandomNumber(0, arrayItems.length - 1)];
   };
 
-  const errorHandler = function (errorMessage, onLoad) {
+  const onError = function (errorMessage, onLoad) {
     const node = window.server.errorTemplate.cloneNode(true);
     const pTag = node.querySelector(`p`);
     pTag.textContent = errorMessage;
@@ -34,7 +34,7 @@
     const buttonTag = node.querySelector(`button`);
     buttonTag.addEventListener(`click`, function () {
       node.remove();
-      window.server.load(onLoad, window.utils.errorHandler);
+      window.server.load(onLoad, window.utils.onError);
     });
 
     window.addEventListener(`keydown`, onEscapeCloseError);
@@ -43,7 +43,7 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  const successHandler = function () {
+  const onSuccess = function () {
     const node = window.server.successTemplate.cloneNode(true);
 
     const onEscapeCloseSuccess = function (evt) {
@@ -66,8 +66,8 @@
   };
 
   window.utils = {
-    errorHandler,
-    successHandler,
+    onError,
+    onSuccess,
     getRandomNumber,
     getRandomFromRange,
     getRandomFromArray

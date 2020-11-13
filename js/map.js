@@ -77,7 +77,7 @@
     return pinNode;
   };
 
-  const successHandler = function (data) {
+  const onSuccess = function (data) {
     window.filters.initFilters();
     window.filters.showFilters(window.filters.SHOW_FILTERS);
     window.map.jsPins = data;
@@ -89,7 +89,7 @@
     window.filters.showFilters(window.filters.HIDE_FILTERS);
     map.classList.remove(`map--faded`);
 
-    window.server.load(successHandler, window.utils.errorHandler);
+    window.server.load(onSuccess, window.utils.onError);
 
     mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
   };
@@ -106,7 +106,6 @@
     onClickShowPins,
     showAddress,
     showPins,
-    successHandler,
     toggleMap
   };
 })();
