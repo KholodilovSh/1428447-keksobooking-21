@@ -107,6 +107,7 @@
   });
 
   window.form = {
+    adForm,
     adFormAddress,
     typesFeatures,
     initForm,
