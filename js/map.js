@@ -18,6 +18,7 @@
   const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 
   let jsPins;
+  let activePin;
 
   const getAddress = function (x = BUTTON_STYLE_LEFT, y = BUTTON_STYLE_TOP) {
     return {
@@ -63,10 +64,13 @@
     const pinNode = pinTemplate.cloneNode(true);
     pinNode.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
     pinNode.style.top = `${pin.location.y - PIN_HEIGHT}px`;
+
     pinNode.addEventListener(`click`, function () {
       if (map.querySelector(`.map__card`)) {
         window.card.onCloseCard();
       }
+      window.map.activePin = pinNode;
+      window.map.activePin.classList.add(`map__pin--active`);
       map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
     });
 
@@ -97,6 +101,7 @@
   window.map = {
     MAFFIN_MIDDLE,
     PINS_NO_MORE,
+    activePin,
     jsPins,
     map,
     mapFilters,
