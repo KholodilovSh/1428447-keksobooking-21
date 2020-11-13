@@ -97,7 +97,7 @@
     setTimeout(onTimeout, 100);
   });
 
-  const onTimeout = function() {
+  const onTimeout = function () {
     window.main.initSite();
     onChangeType();
   };

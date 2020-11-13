@@ -88,14 +88,14 @@
     showPins(window.filters.filterPins());
   };
 
-  const onClickShowPins = function () {
+  const onMainPinClick = function () {
 
     window.filters.showFilters(window.filters.HIDE_FILTERS);
     map.classList.remove(`map--faded`);
 
     window.server.load(onSuccess, window.utils.onError);
 
-    mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
+    mapPinMain.removeEventListener(`mousedown`, onMainPinClick);
   };
 
   window.map = {
@@ -108,7 +108,7 @@
     mapPinMain,
     clearPins,
     getAddress,
-    onClickShowPins,
+    onMainPinClick,
     showAddress,
     showPins,
     toggleMap

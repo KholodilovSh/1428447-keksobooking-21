@@ -15,14 +15,14 @@
     toggleState(true);
 
     // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
-    window.map.mapPinMain.addEventListener(`mousedown`, window.map.onClickShowPins);
+    window.map.mapPinMain.addEventListener(`mousedown`, window.map.onMainPinClick);
 
-    window.map.mapPinMain.addEventListener(`mousedown`, onClickToggleState);
+    window.map.mapPinMain.addEventListener(`mousedown`, onMainPinClickToggleState);
   };
 
-  const onClickToggleState = function () {
+  const onMainPinClickToggleState = function () {
     toggleState(false);
-    window.map.mapPinMain.removeEventListener(`mousedown`, onClickToggleState);
+    window.map.mapPinMain.removeEventListener(`mousedown`, onMainPinClickToggleState);
 
     window.move.moveMainPin();
   };
