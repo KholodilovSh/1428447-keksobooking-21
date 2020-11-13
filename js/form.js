@@ -59,13 +59,7 @@
   });
 
   const reinitForm = function () {
-    window.map.map.classList.add(`map--faded`);
-    window.map.clearPins();
-    window.map.mapPinMain.style.left = window.main.pinMainLocation.x;
-    window.map.mapPinMain.style.top = window.main.pinMainLocation.y;
     adForm.reset();
-    window.main.initSite();
-    onChangeType();
   };
 
 
@@ -95,10 +89,18 @@
 
   // если раскомментировать, не сбрасывает форму совсем
   adForm.addEventListener(`reset`, function () {
-    // evt.preventDefault();
-    // adForm.reset();
-    onChangeType();
+    window.card.onCloseCard();
+    window.map.map.classList.add(`map--faded`);
+    window.map.clearPins();
+    window.map.mapPinMain.style.left = window.main.pinMainLocation.x;
+    window.map.mapPinMain.style.top = window.main.pinMainLocation.y;
+    setTimeout(onTimeout, 100);
   });
+
+  const onTimeout = function() {
+    window.main.initSite();
+    onChangeType();
+  };
 
   adFormType.addEventListener(`change`, function () {
     onChangeType();
