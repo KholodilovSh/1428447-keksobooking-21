@@ -60,21 +60,21 @@
   };
 
   const renderPin = function (pin) {
-    const pinElement = pinTemplate.cloneNode(true);
-    pinElement.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
-    pinElement.style.top = `${pin.location.y - PIN_HEIGHT}px`;
-    pinElement.addEventListener(`click`, function () {
+    const pinNode = pinTemplate.cloneNode(true);
+    pinNode.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
+    pinNode.style.top = `${pin.location.y - PIN_HEIGHT}px`;
+    pinNode.addEventListener(`click`, function () {
       if (map.querySelector(`.map__card`)) {
         window.card.onCloseCard();
       }
       map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
     });
 
-    const imgElement = pinElement.querySelector(`img`);
-    imgElement.src = pin.author.avatar;
-    imgElement.alt = pin.offer.description;
+    const imgTag = pinNode.querySelector(`img`);
+    imgTag.src = pin.author.avatar;
+    imgTag.alt = pin.offer.description;
 
-    return pinElement;
+    return pinNode;
   };
 
   const successHandler = function (data) {
