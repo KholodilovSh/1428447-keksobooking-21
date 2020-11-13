@@ -5,82 +5,96 @@
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
   const renderCard = function (pin) {
-    const cardElement = cardTemplate.cloneNode(true);
+    const cardNode = cardTemplate.cloneNode(true);
+
+    const changeText = function (className, text) {
+      const some = cardNode.querySelector(className);
+      some.textContent = text;
+    };
 
     // Выведите заголовок объявления offer.title в заголовок .popup__title.
-    let someElement = cardElement.querySelector(`.popup__title`);
-    someElement.textContent = pin.offer.title;
+    changeText(`.popup__title`, pin.offer.title);
 
     // Выведите адрес offer.address в блок .popup__text--address.
-    someElement = cardElement.querySelector(`.popup__text--address`);
-    someElement.textContent = pin.offer.address;
+    changeText(`.popup__text--address`, pin.offer.address);
+
 
     // Выведите цену offer.price в блок .popup__text--price строкой вида {{offer.price}}₽/ночь.
     // Например, 5200₽/ночь.
     // <p class="popup__text popup__text--price">5200&#x20bd;<span>/ночь</span></p>
-    someElement = cardElement.querySelector(`.popup__text--price`);
-    someElement.textContent = `${pin.offer.price}₽/ночь`;
+    changeText(`.popup__text--price`, `${pin.offer.price}₽/ночь`);
+
 
     // В блок .popup__type выведите тип жилья offer.type: Квартира для flat, Бунгало для bungalow, Дом для house, Дворец для palace.
-    someElement = cardElement.querySelector(`.popup__type`);
-    someElement.textContent = window.form.typesFeatures[pin.offer.type].russian;
+    changeText(`.popup__type`, window.form.typesFeatures[pin.offer.type].russian);
 
     // Выведите количество гостей и комнат offer.rooms и offer.guests в блок .popup__text--capacity строкой вида {{offer.rooms}} комнаты для {{offer.guests}} гостей. Например, 2 комнаты для 3 гостей.
-    someElement = cardElement.querySelector(`.popup__text--capacity`);
-    someElement.textContent = `${pin.offer.rooms} комнаты для ${pin.offer.guests} гостей`;
+    changeText(`.popup__text--capacity`, `${pin.offer.rooms} комнаты для ${pin.offer.guests} гостей`);
 
     // Время заезда и выезда offer.checkin и offer.checkout в блок .popup__text--time строкой вида Заезд после {{offer.checkin}}, выезд до {{offer.checkout}}. Например, заезд после 14:00, выезд до 12:00.
-    someElement = cardElement.querySelector(`.popup__text--time`);
-    someElement.textContent = `заезд после ${pin.offer.checkin}, выезд до ${pin.offer.checkout}`;
+    changeText(`.popup__text--time`, `заезд после ${pin.offer.checkin}, выезд до ${pin.offer.checkout}`);
 
     // В список .popup__features выведите все доступные удобства в объявлении.
-    someElement = cardElement.querySelector(`.popup__features`);
-    const someChildren = someElement.children;
-    const classFeatures = [];
-    for (let i = 0; i < pin.offer.features.length; i++) {
-      classFeatures.push(`popup__feature--${pin.offer.features[i]}`);
-    }
+    if (pin.offer.features.length === 0) {
 
-    for (let i = someChildren.length - 1; i >= 0; i--) {
-      const child = someChildren[i];
-      let noFeature = true;
-      for (let j = 0; j < classFeatures.length; j++) {
-        if (child.classList.contains(classFeatures[j])) {
-          noFeature = false;
-          break;
-        }
+      cardNode.querySelector(`.popup__features`).remove();
+
+    } else {
+
+      const setOfFeatures = cardNode.querySelector(`.popup__features`).children;
+      const classFeatures = [];
+
+      for (let i = 0; i < pin.offer.features.length; i++) {
+        classFeatures.push(`popup__feature--${pin.offer.features[i]}`);
       }
-      if (noFeature) {
-        someChildren[i].remove();
+
+      for (let i = setOfFeatures.length - 1; i >= 0; i--) {
+        const child = setOfFeatures[i];
+        let noFeature = true;
+        for (let j = 0; j < classFeatures.length; j++) {
+          if (child.classList.contains(classFeatures[j])) {
+            noFeature = false;
+            break;
+          }
+        }
+        if (noFeature) {
+          setOfFeatures[i].remove();
+        }
       }
     }
 
     // В блок .popup__description выведите описание объекта недвижимости offer.description.
-    someElement = cardElement.querySelector(`.popup__description`);
-    someElement.textContent = pin.offer.description;
+    changeText(`.popup__description`, pin.offer.description);
 
     // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
-    someElement = cardElement.querySelector(`.popup__photos`);
-    const somePhoto = someElement.querySelector(`.popup__photo`).cloneNode(true);
-    someElement.children[0].remove();
+    const popupGallery = cardNode.querySelector(`.popup__photos`);
 
-    for (let i = 0; i < pin.offer.photos.length; i++) {
-      const tempPhoto = somePhoto.cloneNode(true);
-      tempPhoto.src = pin.offer.photos[i];
-      someElement.appendChild(tempPhoto);
+    if (pin.offer.photos.length === 0) {
+
+      popupGallery.remove();
+
+    } else {
+
+      const popupPhoto = popupGallery.querySelector(`.popup__photo`).cloneNode(true);
+      popupGallery.children[0].remove();
+
+      for (let i = 0; i < pin.offer.photos.length; i++) {
+        const tempPhoto = popupPhoto.cloneNode(true);
+        tempPhoto.src = pin.offer.photos[i];
+        popupGallery.appendChild(tempPhoto);
+      }
     }
 
     // Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
-    someElement = cardElement.querySelector(`.popup__avatar`);
-    someElement.src = pin.author.avatar;
+    const popupAvatar = cardNode.querySelector(`.popup__avatar`);
+    popupAvatar.src = pin.author.avatar;
 
-    const closeElement = cardElement.querySelector(`.popup__close`);
-
-    closeElement.addEventListener(`click`, onCloseCard);
+    const closePopup = cardNode.querySelector(`.popup__close`);
+    closePopup.addEventListener(`click`, onCloseCard);
 
     document.addEventListener(`keydown`, onEscapeCloseCard);
 
-    return cardElement;
+    return cardNode;
   };
 
   const onEscapeCloseCard = function (evt) {
@@ -92,6 +106,8 @@
   const onCloseCard = function () {
     const cardToRemove = window.map.map.querySelector(`.map__card`);
     if (cardToRemove) {
+      window.map.activePin.classList.remove(`map__pin--active`);
+      window.map.activePin = null;
       cardToRemove.remove();
       document.removeEventListener(`keydown`, onEscapeCloseCard);
     }

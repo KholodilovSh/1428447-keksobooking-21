@@ -18,6 +18,7 @@
   const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 
   let jsPins;
+  let activePin;
 
   const getAddress = function (x = BUTTON_STYLE_LEFT, y = BUTTON_STYLE_TOP) {
     return {
@@ -60,53 +61,56 @@
   };
 
   const renderPin = function (pin) {
-    const pinElement = pinTemplate.cloneNode(true);
-    pinElement.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
-    pinElement.style.top = `${pin.location.y - PIN_HEIGHT}px`;
-    pinElement.addEventListener(`click`, function () {
+    const pinNode = pinTemplate.cloneNode(true);
+    pinNode.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
+    pinNode.style.top = `${pin.location.y - PIN_HEIGHT}px`;
+
+    pinNode.addEventListener(`click`, function () {
       if (map.querySelector(`.map__card`)) {
         window.card.onCloseCard();
       }
+      window.map.activePin = pinNode;
+      window.map.activePin.classList.add(`map__pin--active`);
       map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
     });
 
-    const imgElement = pinElement.querySelector(`img`);
-    imgElement.src = pin.author.avatar;
-    imgElement.alt = pin.offer.description;
+    const imgTag = pinNode.querySelector(`img`);
+    imgTag.src = pin.author.avatar;
+    imgTag.alt = pin.offer.description;
 
-    return pinElement;
+    return pinNode;
   };
 
-  const successHandler = function (data) {
+  const onSuccess = function (data) {
     window.filters.initFilters();
     window.filters.showFilters(window.filters.SHOW_FILTERS);
     window.map.jsPins = data;
     showPins(window.filters.filterPins());
   };
 
-  const onClickShowPins = function () {
+  const onMainPinClick = function () {
 
     window.filters.showFilters(window.filters.HIDE_FILTERS);
     map.classList.remove(`map--faded`);
 
-    window.server.load(successHandler, window.utils.errorHandler);
+    window.server.load(onSuccess, window.utils.onError);
 
-    mapPinMain.removeEventListener(`mousedown`, onClickShowPins);
+    mapPinMain.removeEventListener(`mousedown`, onMainPinClick);
   };
 
   window.map = {
     MAFFIN_MIDDLE,
     PINS_NO_MORE,
+    activePin,
     jsPins,
     map,
     mapFilters,
     mapPinMain,
     clearPins,
     getAddress,
-    onClickShowPins,
+    onMainPinClick,
     showAddress,
     showPins,
-    successHandler,
     toggleMap
   };
 })();
