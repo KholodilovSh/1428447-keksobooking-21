@@ -35,23 +35,31 @@
     changeText(`.popup__text--time`, `заезд после ${pin.offer.checkin}, выезд до ${pin.offer.checkout}`);
 
     // В список .popup__features выведите все доступные удобства в объявлении.
-    const setOfFeatures = cardNode.querySelector(`.popup__features`).children;
-    const classFeatures = [];
-    for (let i = 0; i < pin.offer.features.length; i++) {
-      classFeatures.push(`popup__feature--${pin.offer.features[i]}`);
-    }
+    if (pin.offer.features.length === 0) {
 
-    for (let i = setOfFeatures.length - 1; i >= 0; i--) {
-      const child = setOfFeatures[i];
-      let noFeature = true;
-      for (let j = 0; j < classFeatures.length; j++) {
-        if (child.classList.contains(classFeatures[j])) {
-          noFeature = false;
-          break;
-        }
+      cardNode.querySelector(`.popup__features`).remove();
+
+    } else {
+
+      const setOfFeatures = cardNode.querySelector(`.popup__features`).children;
+      const classFeatures = [];
+
+      for (let i = 0; i < pin.offer.features.length; i++) {
+        classFeatures.push(`popup__feature--${pin.offer.features[i]}`);
       }
-      if (noFeature) {
-        setOfFeatures[i].remove();
+
+      for (let i = setOfFeatures.length - 1; i >= 0; i--) {
+        const child = setOfFeatures[i];
+        let noFeature = true;
+        for (let j = 0; j < classFeatures.length; j++) {
+          if (child.classList.contains(classFeatures[j])) {
+            noFeature = false;
+            break;
+          }
+        }
+        if (noFeature) {
+          setOfFeatures[i].remove();
+        }
       }
     }
 
@@ -60,13 +68,21 @@
 
     // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
     const popupGallery = cardNode.querySelector(`.popup__photos`);
-    const popupPhoto = popupGallery.querySelector(`.popup__photo`).cloneNode(true);
-    popupGallery.children[0].remove();
 
-    for (let i = 0; i < pin.offer.photos.length; i++) {
-      const tempPhoto = popupPhoto.cloneNode(true);
-      tempPhoto.src = pin.offer.photos[i];
-      popupGallery.appendChild(tempPhoto);
+    if (pin.offer.photos.length === 0) {
+
+      popupGallery.remove();
+
+    } else {
+
+      const popupPhoto = popupGallery.querySelector(`.popup__photo`).cloneNode(true);
+      popupGallery.children[0].remove();
+
+      for (let i = 0; i < pin.offer.photos.length; i++) {
+        const tempPhoto = popupPhoto.cloneNode(true);
+        tempPhoto.src = pin.offer.photos[i];
+        popupGallery.appendChild(tempPhoto);
+      }
     }
 
     // Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
