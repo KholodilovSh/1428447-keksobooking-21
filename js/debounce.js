@@ -5,18 +5,18 @@
   const DEBOUNCE_INTERVAL = 500; // ms
   let lastTimeout;
 
-  const useDebounce = function (doSomething) {
+  const use = (doSomething) => {
 
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
     }
 
-    lastTimeout = window.setTimeout(function () {
+    lastTimeout = window.setTimeout(() => {
       doSomething();
     }, DEBOUNCE_INTERVAL);
   };
 
   window.debounce = {
-    useDebounce
+    use
   };
 })();

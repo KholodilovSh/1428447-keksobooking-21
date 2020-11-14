@@ -4,10 +4,10 @@
 
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
-  const renderCard = function (pin) {
+  const render = (pin) => {
     const cardNode = cardTemplate.cloneNode(true);
 
-    const changeText = function (className, text) {
+    const changeText = (className, text) => {
       const some = cardNode.querySelector(className);
       some.textContent = text;
     };
@@ -90,20 +90,20 @@
     popupAvatar.src = pin.author.avatar;
 
     const closePopup = cardNode.querySelector(`.popup__close`);
-    closePopup.addEventListener(`click`, onCloseCard);
+    closePopup.addEventListener(`click`, onClose);
 
     document.addEventListener(`keydown`, onEscapeCloseCard);
 
     return cardNode;
   };
 
-  const onEscapeCloseCard = function (evt) {
+  const onEscapeCloseCard = (evt) => {
     if (evt.key === `Escape`) {
-      onCloseCard();
+      onClose();
     }
   };
 
-  const onCloseCard = function () {
+  const onClose = () => {
     const cardToRemove = window.map.map.querySelector(`.map__card`);
     if (cardToRemove) {
       window.map.activePin.classList.remove(`map__pin--active`);
@@ -114,7 +114,7 @@
   };
 
   window.card = {
-    onCloseCard,
-    renderCard
+    onClose,
+    render
   };
 })();

@@ -17,26 +17,26 @@
       minPrice: 10000}
   };
 
-  const adForm = document.querySelector(`.ad-form`);
+  const ad = document.querySelector(`.ad-form`);
 
-  const adFieldsets = adForm.querySelectorAll(`fieldset`);
-  const adFormAddress = adForm.querySelector(`.ad-form__address`);
-  const adFormType = adForm.querySelector(`.ad-form__type`);
-  const adFormPrice = adForm.querySelector(`.ad-form__price`);
-  const adFormRooms = adForm.querySelector(`.ad-form__rooms`);
-  const adFormTimeIn = adForm.querySelector(`.ad-form__timein`);
-  const adFormTimeOut = adForm.querySelector(`.ad-form__timeout`);
-  const adFormGuests = adForm.querySelector(`.ad-form__guests`);
-  const adFormSubmit = adForm.querySelector(`.ad-form__submit`);
+  const adFieldsets = ad.querySelectorAll(`fieldset`);
+  const adAddress = ad.querySelector(`.ad-form__address`);
+  const adFormType = ad.querySelector(`.ad-form__type`);
+  const adFormPrice = ad.querySelector(`.ad-form__price`);
+  const adFormRooms = ad.querySelector(`.ad-form__rooms`);
+  const adFormTimeIn = ad.querySelector(`.ad-form__timein`);
+  const adFormTimeOut = ad.querySelector(`.ad-form__timeout`);
+  const adFormGuests = ad.querySelector(`.ad-form__guests`);
+  const adFormSubmit = ad.querySelector(`.ad-form__submit`);
 
-  const initForm = function () {
+  const initiate = () => {
 
     // координаты адреса в неактивном состоянии
-    adFormAddress.value = window.map.showAddress(window.map.getAddress());
+    adAddress.value = window.map.showAddress(window.map.getAddress());
     // закрываем возможность коррекции поля Адрес руками указав соответсвующий атрибут в разметке
   };
 
-  const toggleForm = function (disabledState) {
+  const toggle = (disabledState) => {
     // Если  disabledState = true
     // Все интерактивные элементы формы .ad-form должны быть заблокированы с помощью атрибута disabled, добавленного на них или на их родительские блоки fieldset;
     for (let i = 0; i < adFieldsets.length; i++) {
@@ -44,26 +44,26 @@
     }
 
     if (!disabledState) {
-      adForm.classList.remove(`ad-form--disabled`);
+      ad.classList.remove(`ad-form--disabled`);
     } else {
-      adForm.classList.add(`ad-form--disabled`);
+      ad.classList.add(`ad-form--disabled`);
     }
   };
 
-  adFormTimeIn.addEventListener(`change`, function () {
+  adFormTimeIn.addEventListener(`change`, () => {
     adFormTimeOut.value = adFormTimeIn.value;
   });
 
-  adFormTimeOut.addEventListener(`change`, function () {
+  adFormTimeOut.addEventListener(`change`, () => {
     adFormTimeIn.value = adFormTimeOut.value;
   });
 
-  const reinitForm = function () {
-    adForm.reset();
+  const reinitiate = () => {
+    ad.reset();
   };
 
 
-  adFormSubmit.addEventListener(`click`, function (evtClick) {
+  adFormSubmit.addEventListener(`click`, (evtClick) => {
     if ((adFormRooms.value === `100`) === (adFormGuests.value === `0`)) {
       // оба условия или true, или оба false
       // если оба false, надо сравнить кол-во гостей и комнат
@@ -72,7 +72,7 @@
         adFormGuests.setCustomValidity(`Гостей должно быть не больше количества комнат.`);
       } else {
         adFormGuests.setCustomValidity(``);
-        window.server.save(new FormData(adForm), window.utils.onSuccess, window.utils.onError);
+        window.server.save(new FormData(ad), window.utils.onSuccess, window.utils.onError);
         evtClick.preventDefault();
       }
     } else {
@@ -82,36 +82,37 @@
     }
   });
 
-  const onChangeType = function (value) {
+  const onChangeType = (value) => {
     adFormPrice.min = value || typesFeatures[adFormType.value].minPrice;
     adFormPrice.placeholder = adFormPrice.min;
   };
 
   // если раскомментировать, не сбрасывает форму совсем
-  adForm.addEventListener(`reset`, function () {
-    window.card.onCloseCard();
+  ad.addEventListener(`reset`, () => {
+    window.card.onClose();
     window.map.map.classList.add(`map--faded`);
     window.map.clearPins();
-    window.map.mapPinMain.style.left = window.main.pinMainLocation.x;
-    window.map.mapPinMain.style.top = window.main.pinMainLocation.y;
+    window.map.pinMain.style.left = window.main.pinMainLocation.x;
+    window.map.pinMain.style.top = window.main.pinMainLocation.y;
+    window.photos.clear();
     setTimeout(onTimeout, 100);
   });
 
-  const onTimeout = function () {
+  const onTimeout = () => {
     window.main.initSite();
     onChangeType();
   };
 
-  adFormType.addEventListener(`change`, function () {
+  adFormType.addEventListener(`change`, () => {
     onChangeType();
   });
 
   window.form = {
-    adForm,
-    adFormAddress,
+    ad,
+    adAddress,
     typesFeatures,
-    initForm,
-    reinitForm,
-    toggleForm
+    initiate,
+    reinitiate,
+    toggle
   };
 })();

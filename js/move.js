@@ -2,11 +2,11 @@
 
 (function () {
 
-  const moveMainPin = function () {
-    window.map.mapPinMain.addEventListener(`mousedown`, onMouseDown);
+  const listenMainPin = () => {
+    window.map.pinMain.addEventListener(`mousedown`, onMouseDown);
   };
 
-  const onMouseDown = function (downEvt) {
+  const onMouseDown = (downEvt) => {
     downEvt.preventDefault();
 
     let startCoords = {
@@ -14,7 +14,7 @@
       y: downEvt.clientY
     };
 
-    const isPinOnMap = function (location) {
+    const isPinOnMap = (location) => {
       return (
         window.data.RANGE_X[0] <= location.x &&
         window.data.RANGE_X[1] >= location.x
@@ -23,7 +23,7 @@
         window.data.RANGE_Y[1] >= location.y);
     };
 
-    const onMouseMove = function (moveEvt) {
+    const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
       const shift = {
@@ -31,8 +31,8 @@
         y: startCoords.y - moveEvt.clientY
       };
 
-      const nextX = window.map.mapPinMain.offsetLeft - shift.x;
-      const nextY = window.map.mapPinMain.offsetTop - shift.y;
+      const nextX = window.map.pinMain.offsetLeft - shift.x;
+      const nextY = window.map.pinMain.offsetTop - shift.y;
 
       const pinLocation = window.map.getAddress(nextX, nextY);
 
@@ -44,13 +44,13 @@
           y: moveEvt.clientY
         };
 
-        window.map.mapPinMain.style.top = nextY + `px`;
-        window.map.mapPinMain.style.left = nextX + `px`;
-        window.form.adFormAddress.value = window.map.showAddress(pinLocation);
+        window.map.pinMain.style.top = nextY + `px`;
+        window.map.pinMain.style.left = nextX + `px`;
+        window.form.adAddress.value = window.map.showAddress(pinLocation);
       }
     };
 
-    const onMoueUp = function (upEvt) {
+    const onMoueUp = (upEvt) => {
       if (upEvt) {
         upEvt.preventDefault();
       }
@@ -65,6 +65,6 @@
   };
 
   window.move = {
-    moveMainPin
+    listenMainPin
   };
 })();

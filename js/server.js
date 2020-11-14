@@ -16,33 +16,33 @@
   const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
   const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
 
-  const load = function (onLoad, onError) {
+  const load = (onLoad, onError) => {
     const xhr = makeRequestToServer(onLoad, onError);
     xhr.open(`GET`, ServerUrl.LOAD);
     xhr.send();
   };
 
-  const save = function (data, onLoad, onError) {
+  const save = (data, onLoad, onError) => {
     const xhr = makeRequestToServer(onLoad, onError);
     xhr.open(`POST`, ServerUrl.SAVE);
     xhr.send(data);
   };
 
-  const makeRequestToServer = function (onLoad, onError) {
+  const makeRequestToServer = (onLoad, onError) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
-    xhr.addEventListener(`load`, function () {
+    xhr.addEventListener(`load`, () => {
       if (xhr.status === StatusCode.OK) {
         onLoad(xhr.response);
       } else {
         onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText, onLoad);
       }
     });
-    xhr.addEventListener(`error`, function () {
+    xhr.addEventListener(`error`, () => {
       onError(`Произошла ошибка соединения`, onLoad);
     });
-    xhr.addEventListener(`timeout`, function () {
+    xhr.addEventListener(`timeout`, () => {
       onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`, onLoad);
     });
 

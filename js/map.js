@@ -10,36 +10,36 @@
   const MAFFIN_MIDDLE = 33;
 
   const map = document.querySelector(`.map`);
-  const mapPinMain = map.querySelector(`.map__pin--main`);
+  const pinMain = map.querySelector(`.map__pin--main`);
   const mapPins = map.querySelector(`.map__pins`);
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
-  const mapFilters = document.querySelector(`.map__filters`);
+  const filters = document.querySelector(`.map__filters`);
   const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 
   let jsPins;
   let activePin;
 
-  const getAddress = function (x = BUTTON_STYLE_LEFT, y = BUTTON_STYLE_TOP) {
+  const getAddress = (x = BUTTON_STYLE_LEFT, y = BUTTON_STYLE_TOP) => {
     return {
       x: x + MAFFIN_MIDDLE,
       y: y + MAFFIN_MIDDLE
     };
   };
 
-  const showAddress = function (location) {
+  const showAddress = (location) => {
     return `${location.x},${location.y}`;
   };
 
-  const toggleMap = function (disabledState) {
+  const toggle = (disabledState) => {
     // а форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
-    mapFilters.disabled = disabledState;
-    for (let i = 0; i < mapFilters.children.length; i++) {
-      mapFilters.children[i].disabled = disabledState;
+    filters.disabled = disabledState;
+    for (let i = 0; i < filters.children.length; i++) {
+      filters.children[i].disabled = disabledState;
     }
   };
 
-  const showPins = function (filteredPins) {
+  const showPins = (filteredPins) => {
 
     const fragment = document.createDocumentFragment();
 
@@ -53,25 +53,25 @@
     mapPins.appendChild(fragment);
   };
 
-  const clearPins = function () {
+  const clearPins = () => {
     const pins = mapPins.children;
     for (let i = pins.length - 1; i >= 2; i--) {
       pins[i].remove();
     }
   };
 
-  const renderPin = function (pin) {
+  const renderPin = (pin) => {
     const pinNode = pinTemplate.cloneNode(true);
     pinNode.style.left = `${pin.location.x - PIN_WIDTH_HALF}px`;
     pinNode.style.top = `${pin.location.y - PIN_HEIGHT}px`;
 
-    pinNode.addEventListener(`click`, function () {
+    pinNode.addEventListener(`click`, () => {
       if (map.querySelector(`.map__card`)) {
-        window.card.onCloseCard();
+        window.card.onClose();
       }
       window.map.activePin = pinNode;
       window.map.activePin.classList.add(`map__pin--active`);
-      map.insertBefore(window.card.renderCard(pin), mapFiltersContainer);
+      map.insertBefore(window.card.render(pin), mapFiltersContainer);
     });
 
     const imgTag = pinNode.querySelector(`img`);
@@ -81,21 +81,21 @@
     return pinNode;
   };
 
-  const onSuccess = function (data) {
-    window.filters.initFilters();
-    window.filters.showFilters(window.filters.SHOW_FILTERS);
+  const onSuccess = (data) => {
+    window.filters.initiate();
+    window.filters.show(window.filters.SHOW);
     window.map.jsPins = data;
     showPins(window.filters.filterPins());
   };
 
-  const onMainPinClick = function () {
+  const onMainPinClick = () => {
 
-    window.filters.showFilters(window.filters.HIDE_FILTERS);
+    window.filters.show(window.filters.HIDE);
     map.classList.remove(`map--faded`);
 
     window.server.load(onSuccess, window.utils.onError);
 
-    mapPinMain.removeEventListener(`mousedown`, onMainPinClick);
+    pinMain.removeEventListener(`mousedown`, onMainPinClick);
   };
 
   window.map = {
@@ -104,13 +104,13 @@
     activePin,
     jsPins,
     map,
-    mapFilters,
-    mapPinMain,
+    filters,
+    pinMain,
     clearPins,
     getAddress,
     onMainPinClick,
     showAddress,
     showPins,
-    toggleMap
+    toggle
   };
 })();

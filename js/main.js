@@ -7,29 +7,29 @@
     y: null
   };
 
-  const initSite = function () {
+  const initSite = () => {
 
-    window.form.initForm();
+    window.form.initiate();
 
     // блокируем страницу
     toggleState(true);
 
     // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
-    window.map.mapPinMain.addEventListener(`mousedown`, window.map.onMainPinClick);
+    window.map.pinMain.addEventListener(`mousedown`, window.map.onMainPinClick);
 
-    window.map.mapPinMain.addEventListener(`mousedown`, onMainPinClickToggleState);
+    window.map.pinMain.addEventListener(`mousedown`, onMainPinClickToggleState);
   };
 
-  const onMainPinClickToggleState = function () {
+  const onMainPinClickToggleState = () => {
     toggleState(false);
-    window.map.mapPinMain.removeEventListener(`mousedown`, onMainPinClickToggleState);
+    window.map.pinMain.removeEventListener(`mousedown`, onMainPinClickToggleState);
 
-    window.move.moveMainPin();
+    window.move.listenMainPin();
   };
 
-  const toggleState = function (toggle) {
-    window.map.toggleMap(toggle);
-    window.form.toggleForm(toggle);
+  const toggleState = (toggle) => {
+    window.map.toggle(toggle);
+    window.form.toggle(toggle);
   };
 
   window.main = {
@@ -37,8 +37,8 @@
     initSite
   };
 
-  pinMainLocation.x = window.map.mapPinMain.style.left;
-  pinMainLocation.y = window.map.mapPinMain.style.top;
+  pinMainLocation.x = window.map.pinMain.style.left;
+  pinMainLocation.y = window.map.pinMain.style.top;
 
   window.addEventListener(`load`, initSite);
 })();

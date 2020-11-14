@@ -2,22 +2,22 @@
 
 (function () {
 
-  const SHOW_FILTERS = true;
-  const HIDE_FILTERS = false;
+  const SHOW = true;
+  const HIDE = false;
   const PriceRanges = {
     LOW_MIDDLE: 10000,
     MIDDLE_HIGH: 50000
   };
 
-  const typeFilter = window.map.mapFilters.querySelector(`#housing-type`);
-  const priceFilter = window.map.mapFilters.querySelector(`#housing-price`);
-  const roomsFilter = window.map.mapFilters.querySelector(`#housing-rooms`);
-  const guestsFilter = window.map.mapFilters.querySelector(`#housing-guests`);
+  const typeFilter = window.map.filters.querySelector(`#housing-type`);
+  const priceFilter = window.map.filters.querySelector(`#housing-price`);
+  const roomsFilter = window.map.filters.querySelector(`#housing-rooms`);
+  const guestsFilter = window.map.filters.querySelector(`#housing-guests`);
 
-  const featuresFilters = window.map.mapFilters.querySelector(`#housing-features`);
+  const featuresFilters = window.map.filters.querySelector(`#housing-features`);
   const arrayCheckBox = featuresFilters.querySelectorAll(`.map__checkbox`);
 
-  const filterByChecks = function (pin) {
+  const filterByChecks = (pin) => {
     let toShow = true;
     for (let i = 0; i < arrayCheckBox.length; i++) {
       if (arrayCheckBox[i].checked && !pin.offer.features.includes(arrayCheckBox[i].value)) {
@@ -28,19 +28,19 @@
     return toShow;
   };
 
-  const filterByType = function (pin) {
+  const filterByType = (pin) => {
     return (typeFilter.value === `any` || typeFilter.value === pin.offer.type);
   };
 
-  const filterByRooms = function (pin) {
+  const filterByRooms = (pin) => {
     return (roomsFilter.value === `any` || +roomsFilter.value === pin.offer.rooms);
   };
 
-  const filterByGuests = function (pin) {
+  const filterByGuests = (pin) => {
     return (guestsFilter.value === `any` || +guestsFilter.value === pin.offer.guests);
   };
 
-  const filterByPrice = function (pin) {
+  const filterByPrice = (pin) => {
     switch (priceFilter.value) {
       case `any` :
         return true;
@@ -54,10 +54,10 @@
     return null;
   };
 
-  const filterPins = function () {
+  const filterPins = () => {
     const filteredPins = [];
 
-    window.card.onCloseCard();
+    window.card.onClose();
 
     for (let i = 0, j = 0; i < window.map.jsPins.length && j < window.map.PINS_NO_MORE; i++) {
       if (filterByType(window.map.jsPins[i]) &&
@@ -74,16 +74,16 @@
     return filteredPins;
   };
 
-  const showFilters = function (toggle) {
-    window.map.mapFilters.style.visibility = (toggle) ? `visible` : `hidden`;
+  const show = (toggle) => {
+    window.map.filters.style.visibility = (toggle) ? `visible` : `hidden`;
   };
 
-  const initFilters = function () {
+  const initiate = () => {
     resetFilters();
-    window.map.mapFilters.addEventListener(`change`, onChangeFilter);
+    window.map.filters.addEventListener(`change`, onChangeFilter);
   };
 
-  const resetFilters = function () {
+  const resetFilters = () => {
     typeFilter.value = `any`;
     roomsFilter.value = `any`;
     priceFilter.value = `any`;
@@ -93,21 +93,21 @@
     }
   };
 
-  const onChangeFilter = function () {
+  const onChangeFilter = () => {
 
-    window.debounce.useDebounce(onUseDebounce);
+    window.debounce.use(onUseDebounce);
 
   };
 
-  const onUseDebounce = function () {
+  const onUseDebounce = () => {
     window.map.showPins(filterPins());
   };
 
   window.filters = {
-    SHOW_FILTERS,
-    HIDE_FILTERS,
-    initFilters,
-    showFilters,
+    SHOW,
+    HIDE,
+    initiate,
+    show,
     filterPins
   };
 })();
