@@ -1,44 +1,41 @@
 "use strict";
 
-(function () {
+const pinMainLocation = {
+  x: null,
+  y: null
+};
 
-  const pinMainLocation = {
-    x: null,
-    y: null
-  };
+const initSite = () => {
 
-  const initSite = function () {
+  window.form.initiate();
 
-    window.form.initForm();
+  // блокируем страницу
+  toggleState(true);
 
-    // блокируем страницу
-    toggleState(true);
+  // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
+  window.mapModule.pinMain.addEventListener(`mousedown`, window.mapModule.onMainPinClick);
 
-    // Единственное доступное действие в неактивном состоянии — перемещение метки .map__pin--main, являющейся контролом указания адреса объявления. Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние. Событие mousedown должно срабатывать только при нажатии основной кнопки мыши (обычно — левая).
-    window.map.mapPinMain.addEventListener(`mousedown`, window.map.onMainPinClick);
+  window.mapModule.pinMain.addEventListener(`mousedown`, onMainPinClickToggleState);
+};
 
-    window.map.mapPinMain.addEventListener(`mousedown`, onMainPinClickToggleState);
-  };
+const onMainPinClickToggleState = () => {
+  toggleState(false);
+  window.mapModule.pinMain.removeEventListener(`mousedown`, onMainPinClickToggleState);
 
-  const onMainPinClickToggleState = function () {
-    toggleState(false);
-    window.map.mapPinMain.removeEventListener(`mousedown`, onMainPinClickToggleState);
+  window.move.listenMainPin();
+};
 
-    window.move.moveMainPin();
-  };
+const toggleState = (toggle) => {
+  window.mapModule.toggle(toggle);
+  window.form.toggle(toggle);
+};
 
-  const toggleState = function (toggle) {
-    window.map.toggleMap(toggle);
-    window.form.toggleForm(toggle);
-  };
+pinMainLocation.x = window.mapModule.pinMain.style.left;
+pinMainLocation.y = window.mapModule.pinMain.style.top;
 
-  window.main = {
-    pinMainLocation,
-    initSite
-  };
+window.addEventListener(`load`, initSite);
 
-  pinMainLocation.x = window.map.mapPinMain.style.left;
-  pinMainLocation.y = window.map.mapPinMain.style.top;
-
-  window.addEventListener(`load`, initSite);
-})();
+window.main = {
+  pinMainLocation,
+  initSite
+};

@@ -1,22 +1,19 @@
 "use strict";
 
-(function () {
+const DEBOUNCE_INTERVAL = 500; // ms
+let lastTimeout;
 
-  const DEBOUNCE_INTERVAL = 500; // ms
-  let lastTimeout;
+const use = (doSomething) => {
 
-  const useDebounce = function (doSomething) {
+  if (lastTimeout) {
+    window.clearTimeout(lastTimeout);
+  }
 
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
+  lastTimeout = window.setTimeout(() => {
+    doSomething();
+  }, DEBOUNCE_INTERVAL);
+};
 
-    lastTimeout = window.setTimeout(function () {
-      doSomething();
-    }, DEBOUNCE_INTERVAL);
-  };
-
-  window.debounce = {
-    useDebounce
-  };
-})();
+window.debounce = {
+  use
+};
