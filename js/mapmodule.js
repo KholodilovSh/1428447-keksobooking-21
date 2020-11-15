@@ -70,8 +70,8 @@
       if (map.querySelector(`.map__card`)) {
         window.card.onClose();
       }
-      window.map.activePin = pinNode;
-      window.map.activePin.classList.add(`map__pin--active`);
+      window.mapmodule.activePin = pinNode;
+      window.mapmodule.activePin.classList.add(`map__pin--active`);
       map.insertBefore(window.card.render(pin), mapFiltersContainer);
     });
 
@@ -85,7 +85,7 @@
   const onSuccess = (data) => {
     window.filters.initiate();
     window.filters.show(window.filters.SHOW);
-    window.map.jsPins = data;
+    window.mapmodule.jsPins = data;
     showPins(window.filters.filterPins());
   };
 
@@ -99,7 +99,7 @@
     pinMain.removeEventListener(`mousedown`, onMainPinClick);
   };
 
-  window.map = {
+  window.mapmodule = {
     MAFFIN_MIDDLE,
     PINS_NO_MORE,
     activePin,

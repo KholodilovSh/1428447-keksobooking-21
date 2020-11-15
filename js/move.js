@@ -4,7 +4,7 @@
   // (function () {
 
   const listenMainPin = () => {
-    window.map.pinMain.addEventListener(`mousedown`, onMouseDown);
+    window.mapmodule.pinMain.addEventListener(`mousedown`, onMouseDown);
   };
 
   const onMouseDown = (downEvt) => {
@@ -32,10 +32,10 @@
         y: startCoords.y - moveEvt.clientY
       };
 
-      const nextX = window.map.pinMain.offsetLeft - shift.x;
-      const nextY = window.map.pinMain.offsetTop - shift.y;
+      const nextX = window.mapmodule.pinMain.offsetLeft - shift.x;
+      const nextY = window.mapmodule.pinMain.offsetTop - shift.y;
 
-      const pinLocation = window.map.getAddress(nextX, nextY);
+      const pinLocation = window.mapmodule.getAddress(nextX, nextY);
 
       const pinOnMap = isPinOnMap(pinLocation);
 
@@ -45,9 +45,9 @@
           y: moveEvt.clientY
         };
 
-        window.map.pinMain.style.top = nextY + `px`;
-        window.map.pinMain.style.left = nextX + `px`;
-        window.form.adAddress.value = window.map.showAddress(pinLocation);
+        window.mapmodule.pinMain.style.top = nextY + `px`;
+        window.mapmodule.pinMain.style.left = nextX + `px`;
+        window.form.adAddress.value = window.mapmodule.showAddress(pinLocation);
       }
     };
 

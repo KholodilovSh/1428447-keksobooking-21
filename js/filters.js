@@ -10,12 +10,12 @@
     MIDDLE_HIGH: 50000
   };
 
-  const typeFilter = window.map.filters.querySelector(`#housing-type`);
-  const priceFilter = window.map.filters.querySelector(`#housing-price`);
-  const roomsFilter = window.map.filters.querySelector(`#housing-rooms`);
-  const guestsFilter = window.map.filters.querySelector(`#housing-guests`);
+  const typeFilter = window.mapmodule.filters.querySelector(`#housing-type`);
+  const priceFilter = window.mapmodule.filters.querySelector(`#housing-price`);
+  const roomsFilter = window.mapmodule.filters.querySelector(`#housing-rooms`);
+  const guestsFilter = window.mapmodule.filters.querySelector(`#housing-guests`);
 
-  const featuresFilters = window.map.filters.querySelector(`#housing-features`);
+  const featuresFilters = window.mapmodule.filters.querySelector(`#housing-features`);
   const arrayCheckBox = featuresFilters.querySelectorAll(`.map__checkbox`);
 
   const filterByChecks = (pin) => {
@@ -60,14 +60,14 @@
 
     window.card.onClose();
 
-    for (let i = 0, j = 0; i < window.map.jsPins.length && j < window.map.PINS_NO_MORE; i++) {
-      if (filterByType(window.map.jsPins[i]) &&
-      filterByRooms(window.map.jsPins[i]) &&
-      filterByGuests(window.map.jsPins[i]) &&
-      filterByPrice(window.map.jsPins[i]) &&
-      filterByChecks(window.map.jsPins[i])) {
+    for (let i = 0, j = 0; i < window.mapmodule.jsPins.length && j < window.mapmodule.PINS_NO_MORE; i++) {
+      if (filterByType(window.mapmodule.jsPins[i]) &&
+      filterByRooms(window.mapmodule.jsPins[i]) &&
+      filterByGuests(window.mapmodule.jsPins[i]) &&
+      filterByPrice(window.mapmodule.jsPins[i]) &&
+      filterByChecks(window.mapmodule.jsPins[i])) {
 
-        filteredPins.push(window.map.jsPins[i]);
+        filteredPins.push(window.mapmodule.jsPins[i]);
         j++;
       }
     }
@@ -76,12 +76,12 @@
   };
 
   const show = (toggle) => {
-    window.map.filters.style.visibility = (toggle) ? `visible` : `hidden`;
+    window.mapmodule.filters.style.visibility = (toggle) ? `visible` : `hidden`;
   };
 
   const initiate = () => {
     resetFilters();
-    window.map.filters.addEventListener(`change`, onChangeFilter);
+    window.mapmodule.filters.addEventListener(`change`, onChangeFilter);
   };
 
   const resetFilters = () => {
@@ -101,7 +101,7 @@
   };
 
   const onUseDebounce = () => {
-    window.map.showPins(filterPins());
+    window.mapmodule.showPins(filterPins());
   };
 
   window.filters = {
