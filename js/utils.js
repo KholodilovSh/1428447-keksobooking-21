@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const getRandomNumber = (minNumber = 0, maxNumber = 100, roundDigit = 0) => {
     return minNumber + Math.round((maxNumber - minNumber) * Math.random(), roundDigit);

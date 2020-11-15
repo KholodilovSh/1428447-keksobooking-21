@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const SHOW = true;
   const HIDE = false;

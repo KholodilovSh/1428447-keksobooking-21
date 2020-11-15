@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const RANGE_X = [0, 1200];
   const RANGE_Y = [130, 630];

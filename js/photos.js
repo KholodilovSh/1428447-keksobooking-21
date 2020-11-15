@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 

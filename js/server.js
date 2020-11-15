@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const TIMEOUT_IN_MS = 1000;
 

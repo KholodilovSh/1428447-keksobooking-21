@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const DEBOUNCE_INTERVAL = 500; // ms
   let lastTimeout;

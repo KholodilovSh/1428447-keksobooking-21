@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const listenMainPin = () => {
     window.map.pinMain.addEventListener(`mousedown`, onMouseDown);

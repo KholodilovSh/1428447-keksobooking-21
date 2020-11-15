@@ -1,6 +1,7 @@
 "use strict";
 
-(function () {
+(() => {
+  // (function () {
 
   const PINS_NO_MORE = 5;
   const PIN_HEIGHT = 165;
