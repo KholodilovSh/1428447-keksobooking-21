@@ -7,12 +7,12 @@ const PriceRanges = {
   MIDDLE_HIGH: 50000
 };
 
-const typeFilter = window.mapmodule.filters.querySelector(`#housing-type`);
-const priceFilter = window.mapmodule.filters.querySelector(`#housing-price`);
-const roomsFilter = window.mapmodule.filters.querySelector(`#housing-rooms`);
-const guestsFilter = window.mapmodule.filters.querySelector(`#housing-guests`);
+const typeFilter = window.mapModule.filters.querySelector(`#housing-type`);
+const priceFilter = window.mapModule.filters.querySelector(`#housing-price`);
+const roomsFilter = window.mapModule.filters.querySelector(`#housing-rooms`);
+const guestsFilter = window.mapModule.filters.querySelector(`#housing-guests`);
 
-const featuresFilters = window.mapmodule.filters.querySelector(`#housing-features`);
+const featuresFilters = window.mapModule.filters.querySelector(`#housing-features`);
 const arrayCheckBox = featuresFilters.querySelectorAll(`.map__checkbox`);
 
 const filterByChecks = (pin) => {
@@ -57,14 +57,14 @@ const filterPins = () => {
 
   window.card.onClose();
 
-  for (let i = 0, j = 0; i < window.mapmodule.jsPins.length && j < window.mapmodule.PINS_NO_MORE; i++) {
-    if (filterByType(window.mapmodule.jsPins[i]) &&
-      filterByRooms(window.mapmodule.jsPins[i]) &&
-      filterByGuests(window.mapmodule.jsPins[i]) &&
-      filterByPrice(window.mapmodule.jsPins[i]) &&
-      filterByChecks(window.mapmodule.jsPins[i])) {
+  for (let i = 0, j = 0; i < window.mapModule.jsPins.length && j < window.mapModule.PINS_NO_MORE; i++) {
+    if (filterByType(window.mapModule.jsPins[i]) &&
+      filterByRooms(window.mapModule.jsPins[i]) &&
+      filterByGuests(window.mapModule.jsPins[i]) &&
+      filterByPrice(window.mapModule.jsPins[i]) &&
+      filterByChecks(window.mapModule.jsPins[i])) {
 
-      filteredPins.push(window.mapmodule.jsPins[i]);
+      filteredPins.push(window.mapModule.jsPins[i]);
       j++;
     }
   }
@@ -73,12 +73,12 @@ const filterPins = () => {
 };
 
 const show = (toggle) => {
-  window.mapmodule.filters.style.visibility = (toggle) ? `visible` : `hidden`;
+  window.mapModule.filters.style.visibility = (toggle) ? `visible` : `hidden`;
 };
 
 const initiate = () => {
   resetFilters();
-  window.mapmodule.filters.addEventListener(`change`, onChangeFilter);
+  window.mapModule.filters.addEventListener(`change`, onChangeFilter);
 };
 
 const resetFilters = () => {
@@ -98,7 +98,7 @@ const onChangeFilter = () => {
 };
 
 const onUseDebounce = () => {
-  window.mapmodule.showPins(filterPins());
+  window.mapModule.showPins(filterPins());
 };
 
 window.filters = {

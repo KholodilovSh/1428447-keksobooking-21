@@ -102,10 +102,10 @@ const onEscapeCloseCard = (evt) => {
 };
 
 const onClose = () => {
-  const cardToRemove = window.mapmodule.map.querySelector(`.map__card`);
+  const cardToRemove = window.mapModule.map.querySelector(`.map__card`);
   if (cardToRemove) {
-    window.mapmodule.activePin.classList.remove(`map__pin--active`);
-    window.mapmodule.activePin = null;
+    window.mapModule.activePin.classList.remove(`map__pin--active`);
+    window.mapModule.activePin = null;
     cardToRemove.remove();
     document.removeEventListener(`keydown`, onEscapeCloseCard);
   }

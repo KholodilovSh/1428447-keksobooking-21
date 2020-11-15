@@ -1,7 +1,7 @@
 "use strict";
 
 const listenMainPin = () => {
-  window.mapmodule.pinMain.addEventListener(`mousedown`, onMouseDown);
+  window.mapModule.pinMain.addEventListener(`mousedown`, onMouseDown);
 };
 
 const onMouseDown = (downEvt) => {
@@ -29,10 +29,10 @@ const onMouseDown = (downEvt) => {
       y: startCoords.y - moveEvt.clientY
     };
 
-    const nextX = window.mapmodule.pinMain.offsetLeft - shift.x;
-    const nextY = window.mapmodule.pinMain.offsetTop - shift.y;
+    const nextX = window.mapModule.pinMain.offsetLeft - shift.x;
+    const nextY = window.mapModule.pinMain.offsetTop - shift.y;
 
-    const pinLocation = window.mapmodule.getAddress(nextX, nextY);
+    const pinLocation = window.mapModule.getAddress(nextX, nextY);
 
     const pinOnMap = isPinOnMap(pinLocation);
 
@@ -42,9 +42,9 @@ const onMouseDown = (downEvt) => {
         y: moveEvt.clientY
       };
 
-      window.mapmodule.pinMain.style.top = nextY + `px`;
-      window.mapmodule.pinMain.style.left = nextX + `px`;
-      window.form.adAddress.value = window.mapmodule.showAddress(pinLocation);
+      window.mapModule.pinMain.style.top = nextY + `px`;
+      window.mapModule.pinMain.style.left = nextX + `px`;
+      window.form.adAddress.value = window.mapModule.showAddress(pinLocation);
     }
   };
 

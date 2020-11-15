@@ -34,7 +34,7 @@ const adFormSubmit = ad.querySelector(`.ad-form__submit`);
 const initiate = () => {
 
   // координаты адреса в неактивном состоянии
-  adAddress.value = window.mapmodule.showAddress(window.mapmodule.getAddress());
+  adAddress.value = window.mapModule.showAddress(window.mapModule.getAddress());
   // закрываем возможность коррекции поля Адрес руками указав соответсвующий атрибут в разметке
 };
 
@@ -92,10 +92,10 @@ const onChangeType = (value) => {
 // если раскомментировать, не сбрасывает форму совсем
 ad.addEventListener(`reset`, () => {
   window.card.onClose();
-  window.mapmodule.map.classList.add(`map--faded`);
-  window.mapmodule.clearPins();
-  window.mapmodule.pinMain.style.left = window.main.pinMainLocation.x;
-  window.mapmodule.pinMain.style.top = window.main.pinMainLocation.y;
+  window.mapModule.map.classList.add(`map--faded`);
+  window.mapModule.clearPins();
+  window.mapModule.pinMain.style.left = window.main.pinMainLocation.x;
+  window.mapModule.pinMain.style.top = window.main.pinMainLocation.y;
   window.photos.clear();
   setTimeout(onTimeout, 100);
 });
