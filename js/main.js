@@ -1,6 +1,6 @@
 "use strict";
 
-const pinMainLocation = {
+const pinLocation = {
   x: null,
   y: null
 };
@@ -30,12 +30,12 @@ const toggleState = (toggle) => {
   window.form.toggle(toggle);
 };
 
-pinMainLocation.x = window.mapModule.pinMain.style.left;
-pinMainLocation.y = window.mapModule.pinMain.style.top;
+pinLocation.x = window.mapModule.pinMain.style.left;
+pinLocation.y = window.mapModule.pinMain.style.top;
 
 window.addEventListener(`load`, initSite);
 
 window.main = {
-  pinMainLocation,
+  pinLocation,
   initSite
 };
