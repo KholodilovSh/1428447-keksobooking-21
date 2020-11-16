@@ -94,8 +94,8 @@ ad.addEventListener(`reset`, () => {
   window.card.onClose();
   window.mapModule.map.classList.add(`map--faded`);
   window.mapModule.clearPins();
-  window.mapModule.pinMain.style.left = window.main.pinMainLocation.x;
-  window.mapModule.pinMain.style.top = window.main.pinMainLocation.y;
+  window.mapModule.pinMain.style.left = window.main.pinLocation.x;
+  window.mapModule.pinMain.style.top = window.main.pinLocation.y;
   window.photos.clear();
   setTimeout(onTimeout, 100);
 });
